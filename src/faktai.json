@@ -1,0 +1,42 @@
+{
+  "brand": "Peter Bravvo",
+  "legal_lt": "Piotras Andžejevskis",
+  "legal_pl": "Piotr Andrzejewski",
+  "alt_names": ["Piotr Andrzejewski", "Piotras Andžejevskis", "Peter Bravo", "Bravvo Band"],
+  "one_liner_lt": "Peter Bravvo – daugiakalbis (LT / PL / RU / EN) renginių vedėjas, televizijos laidų vedėjas ir diktorius, apjungiantis sceninę patirtį, taktišką humorą ir gyvą muziką į jautriai ir profesionaliai suvaldytus renginius.",
+  "tel": "+370 607 03318",
+  "tel_raw": "+37060703318",
+  "email": "bravvoband@gmail.com",
+  "price_evening": 1000,
+  "price_hour": 200,
+  "deposit_eur": 300,
+  "gbp": "https://share.google/77jYsaOlVgeGzMrQu",
+  "google_reviews": 39,
+  "profiles": {
+    "facebook": "https://www.facebook.com/PeterBravvo",
+    "instagram": "https://www.instagram.com/peter_bravvo/",
+    "youtube": "https://www.youtube.com/channel/UCcw58zifBWeADgGHDDlQALg"
+  },
+  "languages": ["lt", "pl", "ru", "en"],
+  "press": [
+    {"t":"Wileńszczyzna w obiektywie: portret własny – Piotr Andrzejewski","src":"TVP Wilno","url":"https://wilno.tvp.pl/92778412/wilenszczyzna-w-obiektywie-portret-wlasny-piotr-andrzejewski-73","type":"about"},
+    {"t":"Piotr Andrzejewski: lubię YouTube'a i nowe możliwości","src":"Kurier Wileński","date":"2020-11-17","url":"https://kurierwilenski.lt/2020/11/17/piotr-andrzejewski-lubie-youtubea-i-nowe-mozliwosci/","type":"about"},
+    {"t":"Polak Roku 2020 Kuriera Wileńskiego – nominowani","src":"Wilnoteka","url":"https://wilnoteka.lt/artykul/ks-pralat-wojciech-gorlicki-zdobywca-tytulu-polak-roku-2020-kuriera-wilenskiego","type":"mention"},
+    {"t":"Noc Świętojańska w Rudominie","src":"Wilnoteka","date":"2024","url":"https://wilnoteka.lt/artykul/noc-swietojanska-w-rudominie-3","type":"event"},
+    {"t":"Rudomino bawiło się do rana","src":"L24.lt","date":"2024","url":"https://l24.lt/pl/spoleczenstwo/item/406106-rudomino-bawilo-sie-do-rana","type":"event"},
+    {"t":"Rudamina linksminosi iki pat ryto","src":"L24.lt","date":"2024","url":"https://l24.lt/lt/visuomene/item/406117-rudamina-linksminosi-iki-pat-ryto","type":"event"},
+    {"t":"Joninės Rudaminoje: koncertas, DJ Jovani, lazerių šou","src":"Vilniaus rajono savivaldybė","date":"2024","url":"https://vrsa.lt/titulinio-naujienos/424/jonines-rudaminoje-koncertas-dj-jovani-ispudingas-lazeriu-sou-ir-sokiai-iki-ryto:4884","type":"event"},
+    {"t":"Joninės Rudaminoje","src":"VRTIC","url":"https://www.vrtic.lt/renginiai/jonines-rudaminoje-3/","type":"event"},
+    {"t":"Žaliaskarė nušvito ir Nemenčinėje","src":"Vilnijos naujienos","date":"2019","url":"https://vilnijosnaujienos.lt/zaliaskare-nusvito-ir-nemencineje/","type":"event"},
+    {"t":"Savaitgalį įžiebs didžiausią Vilniaus rajono Kalėdų eglę","src":"Made in Vilnius","date":"2019","url":"https://madeinvilnius.lt/naujienos/rajonas/savaitgali-iziebs-didziausias-vilniaus-rajono-kaledu-egles/","type":"event"},
+    {"t":"Kalėdų eglutės įžiebimo šventė Nemenčinėje","src":"VRTIC","url":"https://www.vrtic.lt/renginiai/kaledu-eglutes-iziebimo-svente-nemencineje/","type":"event"},
+    {"t":"Kada jūsų mieste įžiebs Kalėdų eglutę","src":"Delfi","url":"https://www.delfi.lt/kaledos/naujienos/nepraleiskite-kada-jusu-mieste-iziebs-kaledu-eglute-82889197","type":"event"},
+    {"t":"Dożynki w Kabiszkach","src":"Vilniaus rajono savivaldybė","url":"https://vrsa.lt/pl/mieszkancom/nowosci/154/dozynki-w-kabiszkach-i-jubileuszowy-koncert-zespolu-kapela-swietojanska:1848","type":"event"},
+    {"t":"Miss Polka Litwy 2019","src":"Kurier Wileński","date":"2019-02-18","url":"https://kurierwilenski.lt/2019/02/18/dominika-lamauskaite-dziewczyna-kuriera-wilenskiego-miss-polka-litwy-2019/","type":"event"},
+    {"t":"Wileńszczyzna w obiektywie – filmowe opowieści","src":"L24.lt","url":"https://l24.lt/pl/kultura-pl/item/338389-wilenszczyzna-w-obiektywie-filmowe-opowiesci-o-roznych-miejscowosciach-kraju","type":"project"},
+    {"t":"Santara: Vilnija pro objektyvą","src":"LRT Radioteka","url":"https://www.lrt.lt/radioteka/irasas/2000090244/santara-vilnija-pro-objektyva","type":"project"},
+    {"t":"Co się dzieje (TVP Wilno) – epizodas","src":"YouTube","url":"https://www.youtube.com/watch?v=znb1ARwL58M","type":"video"},
+    {"t":"Wileńszczyzna w obiektywie – epizodas","src":"YouTube","url":"https://www.youtube.com/watch?v=mDnUXkfjIyk","type":"video"},
+    {"t":"Joninės Rudaminoje 2024 – video","src":"YouTube","url":"https://www.youtube.com/watch?v=yxIZjIzUVbc","type":"video"}
+  ]
+}
