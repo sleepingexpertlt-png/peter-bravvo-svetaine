@@ -1,0 +1,4 @@
+src/dist2/
+src/preview2.html
+__pycache__/
+*.pyc

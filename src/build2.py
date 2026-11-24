@@ -35,7 +35,7 @@ for p in PAGES:
     p["title"], p["desc"] = src["title"], src["desc"]
     p["h1"] = src["h1"]
 # ---------- žinynas ----------
-ZDIR = os.path.join(os.path.dirname(ROOT), "zinynas")
+ZDIR = os.path.join(ROOT, "zinynas") if os.path.isdir(os.path.join(ROOT, "zinynas")) else os.path.join(os.path.dirname(ROOT), "zinynas")
 ZBASE = {"lt": "/zinynas/", "pl": "/pl/poradnik/", "ru": "/ru/sovety/", "en": "/en/guide/"}
 ZUI = {
  "lt": dict(hub="Žinynas", hub_t="Žinynas: vestuvės, šventės ir renginiai – Peter Bravvo", hub_d="Patarimai iš 400+ renginių: vestuvių eiga, tradicijos, žaidimai, sveikinimai, dvikalbės šventės, vedėjo pasirinkimas.",
