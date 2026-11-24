@@ -37,12 +37,29 @@ def post(url, key, body, timeout=60):
         return json.loads(r.read().decode())
 
 
+PREF = ["llama-3.3-70b", "llama-4", "qwen3", "qwen-2.5-72b", "deepseek-chat", "deepseek-r1", "gemma-3-27b", "mistral-small", "nemotron"]
+
+
+def free_model():
+    """Išrenka veikiantį nemokamą (:free) OpenRouter modelį pagal pirmenybių sąrašą."""
+    try:
+        with urllib.request.urlopen("https://openrouter.ai/api/v1/models", timeout=30) as r:
+            ids = [m["id"] for m in json.loads(r.read().decode()).get("data", []) if m["id"].endswith(":free")]
+    except Exception as ex:
+        print("Modelių sąrašo gauti nepavyko:", ex); return "meta-llama/llama-3.3-70b-instruct:free"
+    for pref in PREF:
+        for i in ids:
+            if pref in i:
+                print("Pasirinktas nemokamas modelis:", i); return i
+    return ids[0] if ids else "meta-llama/llama-3.3-70b-instruct:free"
+
+
 def providers():
     out = []
     if os.environ.get("PERPLEXITY_API_KEY"):
         out.append(("perplexity", "https://api.perplexity.ai/chat/completions", os.environ["PERPLEXITY_API_KEY"], "sonar", 0.006))
     if os.environ.get("OPENROUTER_API_KEY"):
-        models = os.environ.get("OPENROUTER_MODEL") or "meta-llama/llama-3.3-70b-instruct:free"
+        models = os.environ.get("OPENROUTER_MODEL") or free_model()
         for m in [x.strip() for x in models.split(",") if x.strip()]:
             out.append(("openrouter:" + m, "https://openrouter.ai/api/v1/chat/completions", os.environ["OPENROUTER_API_KEY"], m, 0.0 if m.endswith(":free") else 0.006))
     if os.environ.get("GROQ_API_KEY"):
@@ -98,6 +115,8 @@ def main():
         if new:
             w.writerow(["data", "tiekejas", "id", "kalba", "klasteris", "tier", "tikslas", "promptas", "paminetas", "cituotas", "vieta", "saltiniai", "klaida"])
         for row in batch:
+            if not provs:
+                break
             for prov in provs:
                 if spent + prov[4] > MAX_USD:
                     print(f"Pasiekta riba {MAX_USD} $ – stoju."); break
