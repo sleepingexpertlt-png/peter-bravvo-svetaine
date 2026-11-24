@@ -6,7 +6,7 @@ on:
     inputs:
       batch:
         description: "Kiek promptų šį kartą"
-        default: "150"
+        default: "45"
 permissions:
   contents: write
 concurrency:
@@ -26,7 +26,7 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          BATCH: ${{ github.event.inputs.batch || '150' }}
+          BATCH: ${{ github.event.inputs.batch || '45' }}
           MAX_USD: "1.0"
         run: python aeo/aeo_bot.py
       - name: Išsaugoti rezultatus

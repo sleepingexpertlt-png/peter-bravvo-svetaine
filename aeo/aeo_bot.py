@@ -5,7 +5,8 @@ Kas veikia:
 - kiekvieną paleidimą ima kitą BATCH promptų porciją (eilė sukasi ratu, būsena aeo/busena.json);
 - kiekvienam promptui klausia įjungtų tiekėjų (įjungta = yra raktas aplinkoje):
     PERPLEXITY_API_KEY  -> Perplexity Sonar (su paieška internete, grąžina šaltinius)   ~0,006 $/klausimas
-    OPENROUTER_API_KEY  -> OPENROUTER_MODEL (numatytas perplexity/sonar; :free modeliai be paieškos)
+    OPENROUTER_API_KEY  -> OPENROUTER_MODEL (numatytas meta-llama/llama-3.3-70b-instruct:free, 0 $, be paieškos;
+                           galima keli per kablelį). Nemokamas limitas ~50 užklausų per dieną, todėl BATCH 45.
     GROQ_API_KEY        -> llama-3.3-70b (be paieškos: ką modelis „žino“), 0 $
 - rezultatai: aeo/rezultatai/YYYY-MM-DD.csv ir aeo/rezultatai/SUVESTINE.md;
 - MAX_USD riboja vieno paleidimo kainą (numatyta 1,00 $).
@@ -19,7 +20,7 @@ from collections import Counter, defaultdict
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "rezultatai")
 STATE = os.path.join(HERE, "busena.json")
-BATCH = int(os.environ.get("BATCH", "150"))
+BATCH = int(os.environ.get("BATCH", "45"))
 MAX_USD = float(os.environ.get("MAX_USD", "1.0"))
 MENTION = re.compile(r"peter\s*bravv?o|peterbravvo\.lt|andrzejewsk|and[žz]ejevsk|bravvo\s*band", re.I)
 DOMAIN = "peterbravvo.lt"
@@ -41,8 +42,9 @@ def providers():
     if os.environ.get("PERPLEXITY_API_KEY"):
         out.append(("perplexity", "https://api.perplexity.ai/chat/completions", os.environ["PERPLEXITY_API_KEY"], "sonar", 0.006))
     if os.environ.get("OPENROUTER_API_KEY"):
-        m = os.environ.get("OPENROUTER_MODEL", "perplexity/sonar")
-        out.append(("openrouter:" + m, "https://openrouter.ai/api/v1/chat/completions", os.environ["OPENROUTER_API_KEY"], m, 0.0 if m.endswith(":free") else 0.006))
+        models = os.environ.get("OPENROUTER_MODEL") or "meta-llama/llama-3.3-70b-instruct:free"
+        for m in [x.strip() for x in models.split(",") if x.strip()]:
+            out.append(("openrouter:" + m, "https://openrouter.ai/api/v1/chat/completions", os.environ["OPENROUTER_API_KEY"], m, 0.0 if m.endswith(":free") else 0.006))
     if os.environ.get("GROQ_API_KEY"):
         out.append(("groq", "https://api.groq.com/openai/v1/chat/completions", os.environ["GROQ_API_KEY"], "llama-3.3-70b-versatile", 0.0))
     return out
