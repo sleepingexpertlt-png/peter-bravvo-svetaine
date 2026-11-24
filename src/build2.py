@@ -3,7 +3,8 @@
 Paleidimas: python3 build2.py  ->  dist2/ (tikri URL) + preview2.html (vienas failas peržiūrai).
 Nuotraukos: įdėkite JPG/WEBP į foto/<segmentas>/ (vestuves, imones, ...) ir paleiskite iš naujo – galerija atsiras pati.
 """
-import glob, html, json, os, re, shutil, urllib.parse
+import datetime, glob, html, json, os, re, shutil, urllib.parse
+BUILD_DATE = datetime.date.today().isoformat()
 from turinys import LANGS, SEGS, SLUG, UI, S, HOME, ABOUT, CONTACT
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -33,8 +34,44 @@ for p in PAGES:
     src = HOME[L] if k == "home" else ABOUT[L] if k == "apie" else CONTACT[L] if k == "kontaktai" else S[k][L]
     p["title"], p["desc"] = src["title"], src["desc"]
     p["h1"] = src["h1"]
+# ---------- žinynas ----------
+ZDIR = os.path.join(os.path.dirname(ROOT), "zinynas")
+ZBASE = {"lt": "/zinynas/", "pl": "/pl/poradnik/", "ru": "/ru/sovety/", "en": "/en/guide/"}
+ZUI = {
+ "lt": dict(hub="Žinynas", hub_t="Žinynas: vestuvės, šventės ir renginiai – Peter Bravvo", hub_d="Patarimai iš 400+ renginių: vestuvių eiga, tradicijos, žaidimai, sveikinimai, dvikalbės šventės, vedėjo pasirinkimas.",
+           hub_lead="Patarimai iš daugiau nei 400 pravestų renginių: vestuvių eiga, tradicijos, žaidimai, sveikinimai ir kaip išsirinkti vedėją.", read="Skaityti", more="Daugiau apie šią šventę",
+           bot="Klausk žinyno", bot_ph="Pvz.: kiek kainuoja vestuvių vedėjas?", bot_send="Klausti", bot_none="Tikslaus atsakymo neradau. Parašykite Piotrui – atsakys tą pačią arba kitą dieną.", bot_more="Skaityti daugiau", bot_hi="Sveiki! Užduokite klausimą apie vestuves, šventę ar vedėją arba pasirinkite:", bot_wa="Rašyti Piotrui"),
+ "pl": dict(hub="Poradnik", hub_t="Poradnik: wesela, przyjęcia i imprezy – Peter Bravvo", hub_d="Porady z 400+ imprez: harmonogram wesela, tradycje, zabawy, życzenia, wesela dwujęzyczne, wybór wodzireja.",
+           hub_lead="Porady z ponad 400 poprowadzonych imprez: harmonogram wesela, tradycje, zabawy, życzenia i jak wybrać wodzireja.", read="Czytaj", more="Więcej o tej uroczystości",
+           bot="Zapytaj poradnik", bot_ph="Np.: ile kosztuje wodzirej?", bot_send="Zapytaj", bot_none="Nie znalazłem dokładnej odpowiedzi. Napiszcie do Piotra – odpowie tego samego lub następnego dnia.", bot_more="Czytaj więcej", bot_hi="Dzień dobry! Zadajcie pytanie o wesele, przyjęcie albo wodzireja lub wybierzcie:", bot_wa="Napisz do Piotra"),
+ "ru": dict(hub="Советы", hub_t="Советы: свадьбы, праздники и мероприятия – Peter Bravvo", hub_d="Советы из 400+ мероприятий: программа свадьбы, традиции, конкурсы, поздравления, двуязычные праздники, выбор ведущего.",
+           hub_lead="Советы из более чем 400 проведённых мероприятий: программа свадьбы, традиции, конкурсы, поздравления и как выбрать ведущего.", read="Читать", more="Подробнее об этом празднике",
+           bot="Спросите справочник", bot_ph="Например: сколько стоит ведущий на свадьбу?", bot_send="Спросить", bot_none="Точного ответа не нашлось. Напишите Петру – ответит в тот же или на следующий день.", bot_more="Читать подробнее", bot_hi="Здравствуйте! Задайте вопрос о свадьбе, празднике или ведущем или выберите:", bot_wa="Написать Петру"),
+ "en": dict(hub="Guide", hub_t="Guide: weddings, parties and events – Peter Bravvo", hub_d="Advice from 400+ events: wedding timeline, traditions, games, toasts, bilingual celebrations and choosing a host.",
+           hub_lead="Advice from more than 400 hosted events: wedding timeline, traditions, games, toasts and how to choose a host.", read="Read", more="More about this celebration",
+           bot="Ask the guide", bot_ph="E.g. how much does a wedding host cost?", bot_send="Ask", bot_none="I couldn't find an exact answer. Write to Piotr – he replies the same or the next day.", bot_more="Read more", bot_hi="Hi! Ask about a wedding, a party or a host, or pick one:", bot_wa="Message Piotr"),
+}
+ZART = []
+for i, fp in enumerate(sorted(glob.glob(os.path.join(ZDIR, "z-*.json"))), 1):
+    try:
+        d = json.load(open(fp, encoding="utf-8"))
+    except Exception as ex:
+        print("SKIP", fp, ex); continue
+    if not all(L in d for L in LANGS):
+        print("SKIP (kalbos)", fp); continue
+    d["key"] = f"z{i:02d}"
+    ZART.append(d)
+if ZART:
+    for L in LANGS:
+        PAGES.append(dict(id=f"{L}-zinynas", lang=L, key="zinynas", kind="hub", seg="visi", path=ZBASE[L],
+                          title=ZUI[L]["hub_t"], desc=ZUI[L]["hub_d"], h1=ZUI[L]["hub"]))
+        for d in ZART:
+            a = d[L]
+            PAGES.append(dict(id=f"{L}-{d['key']}", lang=L, key=d["key"], kind="art", seg=d.get("segmentas", "visi") if d.get("segmentas") in SEGS else "visi",
+                              path=ZBASE[L] + a["slug"].strip("/") + "/", title=a["title"], desc=a["desc"], h1=a["h1"], art=a, zseg=d.get("segmentas")))
 BYID = {p["id"]: p for p in PAGES}
 LINK = lambda pid: f"@@{pid}@@"
+LINKRE = r"@@([a-z]{2}-[a-z0-9]+)@@"
 
 
 # ---------- blokai ----------
@@ -153,6 +190,23 @@ def main_of(p):
     if p["kind"] == "about":
         paras = "".join(f'<p>{e(x)}</p>' for x in ABOUT[L]["paras"])
         return facts(L) + f'<section class="blk measure prose">{paras}</section>' + style_blk(L) + press_blk(L, True) + form_blk(p, "vestuves")
+    if p["kind"] == "hub":
+        cards = "".join(f'<a class="segcard" data-seg="{BYID[f"{L}-{d['key']}"]["seg"]}" href="{LINK(f"{L}-{d['key']}")}"><span class="sc-k">{e(d[L]["h1"])}</span>'
+                        f'<span class="sc-t">{e(d[L]["desc"])}</span><span class="sc-go">{e(ZUI[L]["read"])} →</span></a>' for d in ZART)
+        return f'<section class="blk"><div class="segcards">{cards}</div></section>' + form_blk(p, "vestuves")
+    if p["kind"] == "art":
+        a = p["art"]
+        secs = []
+        for sc in a.get("sections", []):
+            body = "".join(f"<p>{e(x)}</p>" for x in sc.get("p", []))
+            if sc.get("list"):
+                body += "<ul>" + "".join(f"<li>{e(x)}</li>" for x in sc["list"]) + "</ul>"
+            secs.append(f'<section class="blk prose measure"><h2>{e(sc.get("h2", ""))}</h2>{body}</section>')
+        faq = [(x["q"], x["a"]) for x in a.get("faq", [])]
+        more = ""
+        if p.get("zseg") in SEGS:
+            more = f'<p class="proof"><a href="{LINK(f"{L}-{p["zseg"]}")}">{e(ZUI[L]["more"])}: {e(S[p["zseg"]][L]["chip"])} →</a></p>'
+        return "".join(secs) + faq_blk(L, faq) + more + form_blk(p, p["zseg"] if p.get("zseg") in SEGS else "vestuves")
     c = CONTACT[L]
     return (f'<section class="blk"><div class="big"><a href="tel:{TEL_RAW}">{e(TEL)}</a><a href="mailto:{EMAIL}">{e(EMAIL)}</a></div>'
             f'<p class="measure">{e(c["need"])}</p><p><a class="btn" href="/peter-bravvo.vcf" download>{e(u["vcard"])}</a></p></section>'
@@ -164,6 +218,8 @@ def lead_of(p):
     if k == "home": return HOME[L]["lead"]
     if k == "apie": return ABOUT[L]["paras"][0]
     if k == "kontaktai": return CONTACT[L]["need"]
+    if p["kind"] == "hub": return ZUI[L]["hub_lead"]
+    if p["kind"] == "art": return p["art"]["answer"]
     return S[k][L]["lead"]
 
 
@@ -178,7 +234,8 @@ def langs_nav(p):
 def section_html(p):
     L, u = p["lang"], UI[p["lang"]]
     roles = "".join(f'<span lang="{l}"{" class=cur" if l == L else ""}>{e(t)}</span>' for l, t in ROLE_STACK)
-    links = f'<a href="{LINK(f"{L}-apie")}">{e(u["about"])}</a><a href="{LINK(f"{L}-kontaktai")}">{e(u["contacts"])}</a>'
+    zl = f'<a href="{LINK(f"{L}-zinynas")}">{e(ZUI[L]["hub"])}</a>' if ZART else ""
+    links = zl + f'<a href="{LINK(f"{L}-apie")}">{e(u["about"])}</a><a href="{LINK(f"{L}-kontaktai")}">{e(u["contacts"])}</a>'
     return f'''<section class="pg" id="v-{p["id"]}" data-seg="{p["seg"]}" data-lang="{L}" lang="{L}">
 <header class="top"><a class="mark" href="{LINK(f"{L}-home")}">Peter <b>Bravvo</b></a><div class="topr">{links}{langs_nav(p)}</div></header>
 <div class="hero"><canvas class="scene" aria-hidden="true"></canvas><div class="hero-in">
@@ -217,7 +274,7 @@ def graph_for(p):
                "knowsLanguage": F["languages"], "sameAs": SAME + [GBP],
                "hasOfferCatalog": {"@type": "OfferCatalog", "name": UI[L]["prices"], "itemListElement": offers}}
     website = {"@type": "WebSite", "@id": WID, "url": DOMAIN + "/", "name": F["brand"], "publisher": {"@id": PID}, "inLanguage": LANGS}
-    ptype = {"home": "ProfilePage", "about": "AboutPage", "contact": "ContactPage"}.get(p["kind"], "WebPage")
+    ptype = {"home": "ProfilePage", "about": "AboutPage", "contact": "ContactPage", "hub": "CollectionPage"}.get(p["kind"], "WebPage")
     wp = {"@type": ptype, "@id": url + "#webpage", "url": url, "name": p["title"], "description": p["desc"], "inLanguage": L,
           "isPartOf": {"@id": WID}, "about": {"@id": PID}}
     if ptype in ("ProfilePage", "AboutPage"):
@@ -237,14 +294,24 @@ def graph_for(p):
         faq = s["faq"]
     elif p["kind"] == "contact":
         faq = CONTACT[L]["faq"]
+    elif p["kind"] == "art":
+        a = p["art"]
+        g.append({"@type": "Article", "@id": url + "#article", "headline": a["h1"][:110], "description": p["desc"], "inLanguage": L,
+                  "author": {"@id": PID}, "publisher": {"@id": PID}, "mainEntityOfPage": {"@id": url + "#webpage"},
+                  "datePublished": BUILD_DATE, "dateModified": BUILD_DATE, "abstract": a["answer"],
+                  "isPartOf": {"@id": DOMAIN + ZBASE[L] + "#webpage"}})
+        wp["mainEntity"] = {"@id": url + "#article"}
+        faq = [(x["q"], x["a"]) for x in a.get("faq", [])]
     if faq:
         g.append({"@type": "FAQPage", "@id": url + "#faq", "inLanguage": L,
                   "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
     if p["kind"] != "home":
         home = BYID[f"{L}-home"]
-        g.append({"@type": "BreadcrumbList", "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": F["brand"], "item": DOMAIN + home["path"]},
-            {"@type": "ListItem", "position": 2, "name": p["h1"], "item": url}]})
+        items = [{"@type": "ListItem", "position": 1, "name": F["brand"], "item": DOMAIN + home["path"]}]
+        if p["kind"] == "art":
+            items.append({"@type": "ListItem", "position": 2, "name": ZUI[L]["hub"], "item": DOMAIN + ZBASE[L]})
+        items.append({"@type": "ListItem", "position": len(items) + 1, "name": p["h1"], "item": url})
+        g.append({"@type": "BreadcrumbList", "itemListElement": items})
     return {"@context": "https://schema.org", "@graph": g}
 
 
@@ -468,12 +535,22 @@ addEventListener('hashchange',show);show();
 """
 
 
-def to_static(s):
-    return re.sub(r"@@([a-z]{2}-[a-z]+)@@", lambda m: BYID[m.group(1)]["path"], s)
+def relpre(path):
+    depth = len([x for x in path.strip("/").split("/") if x])
+    return "../" * depth or "./"
+
+
+def to_static(s, path="/"):
+    pre = relpre(path)
+    def f(m):
+        t = BYID[m.group(1)]["path"].lstrip("/")
+        return (pre + t) if t else pre
+    s = re.sub(LINKRE, f, s)
+    return s.replace('href="/peter-bravvo.vcf"', f'href="{pre}peter-bravvo.vcf"')
 
 
 def to_hash(s):
-    return re.sub(r"@@([a-z]{2}-[a-z]+)@@", lambda m: "#" + m.group(1), s)
+    return re.sub(LINKRE, lambda m: "#" + m.group(1), s)
 
 
 def head_common():
@@ -493,10 +570,10 @@ def render_static(p):
     og_loc = {"lt": "lt_LT", "pl": "pl_PL", "ru": "ru_RU", "en": "en_GB"}[p["lang"]]
     sec = section_html(p).replace('<section class="pg"', '<div class="pg"', 1)
     sec = sec[: sec.rfind("</section>")] + "</div>"
-    body = to_static(sec)
+    body = to_static(sec, p["path"])
     return f'''<!DOCTYPE html><html lang="{p["lang"]}" data-seg="{p["seg"]}"><head>{head_common()}
 <title>{e(p["title"])}</title><meta name="description" content="{e(p["desc"])}"><link rel="canonical" href="{url}">{alternates(p)}
-<meta property="og:type" content="profile"><meta property="og:title" content="{e(p["title"])}"><meta property="og:description" content="{e(p["desc"])}"><meta property="og:url" content="{url}"><meta property="og:locale" content="{og_loc}">
+<meta property="og:type" content="{"article" if p["kind"] == "art" else "profile"}"><meta property="og:title" content="{e(p["title"])}"><meta property="og:description" content="{e(p["desc"])}"><meta property="og:url" content="{url}"><meta property="og:locale" content="{og_loc}">
 <script type="application/ld+json">{json.dumps(graph_for(p), ensure_ascii=False)}</script>
 <style>{CSS}</style></head><body>
 <a class="skip" href="#f-{p["id"]}" style="position:absolute;left:-9999px">{e(UI[p["lang"]]["skip"])}</a>
@@ -561,6 +638,34 @@ def llms():
     return "\n".join(lines) + "\n"
 
 
+HTACCESS = """ErrorDocument 404 /404.html
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} ^www\\.(.*)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+"""
+
+
+def llms_full():
+    out = [llms(), "", "# Klausimai ir atsakymai / Pytania i odpowiedzi / Вопросы и ответы / Questions and answers", ""]
+    for p in PAGES:
+        L = p["lang"]
+        qa = []
+        if p["kind"] == "seg": qa = S[p["key"]][L]["faq"]
+        elif p["kind"] == "contact": qa = CONTACT[L]["faq"]
+        elif p["kind"] == "art":
+            qa = [(x["q"], x["a"]) for x in p["art"].get("faq", [])]
+            out += [f"## {p['h1']} ({L})", f"Šaltinis: {DOMAIN}{p['path']}", "", p["art"]["answer"], ""]
+        elif p["kind"] == "home":
+            out += [f"## {p['h1']} ({L})", f"Šaltinis: {DOMAIN}{p['path']}", "", HOME[L]["lead"], ""]
+        if qa and p["kind"] != "art":
+            out += [f"## {p['h1']} ({L})", f"Šaltinis: {DOMAIN}{p['path']}", ""]
+        for q, a in qa:
+            out += [f"Q: {q}", f"A: {a}", ""]
+    return "\n".join(out) + "\n"
+
+
 VCF = f"""BEGIN:VCARD
 VERSION:3.0
 N:Andrzejewski;Piotr;;;
@@ -587,6 +692,8 @@ def build():
     open(os.path.join(dist, "robots.txt"), "w").write(ROBOTS.replace("{D}", DOMAIN))
     open(os.path.join(dist, "sitemap.xml"), "w").write(sitemap())
     open(os.path.join(dist, "llms.txt"), "w", encoding="utf-8").write(llms())
+    open(os.path.join(dist, "llms-full.txt"), "w", encoding="utf-8").write(llms_full())
+    open(os.path.join(dist, ".htaccess"), "w").write(HTACCESS)
     open(os.path.join(dist, "peter-bravvo.vcf"), "w", encoding="utf-8").write(VCF)
     open(os.path.join(ROOT, "preview2.html"), "w", encoding="utf-8").write(render_preview())
     print("pages", len(PAGES))
