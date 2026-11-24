@@ -1,2 +1,7 @@
 data,tiekejas,id,kalba,klasteris,tier,tikslas,promptas,paminetas,cituotas,vieta,saltiniai,klaida
 2026-11-24,openrouter:meta-llama/llama-3.3-70b-instruct:free,D0001,lt,atradimas-vestuves,1,vestuves,vestuvių vedėjas Vilniuje,,,,,HTTP 404
+2026-11-24,openrouter:nvidia/nemotron-3.5-super-vl:free,D0006,lt,atradimas-vestuves,1,vestuves,geriausias vestuvių vedėjas Vilniaus rajone,0,0,,,
+2026-11-24,openrouter:nvidia/nemotron-3.5-super-vl:free,D0007,lt,atradimas-vestuves,1,vestuves,geriausias vestuvių vedėjas Trakuose,0,0,,,
+2026-11-24,openrouter:nvidia/nemotron-3.5-super-vl:free,D0008,lt,atradimas-vestuves,1,vestuves,geriausias vestuvių vedėjas Lietuvoje,0,0,,,
+2026-11-24,openrouter:nvidia/nemotron-3.5-super-vl:free,D0009,lt,atradimas-vestuves,1,vestuves,vestuvių vedėjas lenkų ir lietuvių kalbomis Vilniuje,0,0,,,
+2026-11-24,openrouter:nvidia/nemotron-3.5-super-vl:free,D0010,lt,atradimas-vestuves,1,vestuves,vestuvių vedėjas lenkų ir lietuvių kalbomis Vilniaus rajone,0,0,,,
