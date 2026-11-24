@@ -24,3 +24,14 @@ jobs:
           path: site
       - id: d
         uses: actions/deploy-pages@v4
+  hostinger:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Atnaujinti šaką hostinger (svetainės failai šaknyje)
+        run: |
+          git push --force origin "$(git subtree split --prefix=site HEAD)":refs/heads/hostinger
