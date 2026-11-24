@@ -1,0 +1,37 @@
+name: AEO botas (promptų matavimas)
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+    inputs:
+      batch:
+        description: "Kiek promptų šį kartą"
+        default: "150"
+permissions:
+  contents: write
+concurrency:
+  group: aeo
+  cancel-in-progress: false
+jobs:
+  matuoti:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Uždavinėti promptus AI paieškoms
+        env:
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          BATCH: ${{ github.event.inputs.batch || '150' }}
+          MAX_USD: "1.0"
+        run: python aeo/aeo_bot.py
+      - name: Išsaugoti rezultatus
+        run: |
+          git config user.name "aeo-botas"
+          git config user.email "aeo-botas@users.noreply.github.com"
+          git add aeo/busena.json aeo/rezultatai || true
+          git diff --cached --quiet || (git commit -m "AEO matavimas $(date -u +%F)" && git push)
