@@ -5,7 +5,7 @@ Nuotraukos: įdėkite JPG/WEBP į foto/<segmentas>/ (vestuves, imones, ...) ir p
 """
 import datetime, glob, html, json, os, re, shutil, urllib.parse
 BUILD_DATE = datetime.date.today().isoformat()
-from turinys import LANGS, SEGS, SLUG, UI, S, HOME, ABOUT, CONTACT, TEMA, POZ, SUKIS
+from turinys import LANGS, SEGS, SLUG, UI, S, HOME, ABOUT, CONTACT, TEMA, POZ, SUKIS, ISIV
 TH = lambda sg: TEMA.get(sg, sg)
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -176,6 +176,12 @@ def segcards(L):
 
 
 # ---------- puslapio kūnas ----------
+def isiv_blk(k, L):
+    if k not in ISIV: return ""
+    h, qs = ISIV[k][L]
+    return f'<section class="blk"><h2>{e(h)}</h2><ol class="isiv">' + "".join(f"<li>{e(q)}</li>" for q in qs) + "</ol></section>"
+
+
 def poz_blk(L):
     z = POZ[L]
     return (f'<section class="blk style"><h2>{e(z["h"])}</h2><ul class="trio">' + "".join(f"<li>{e(x)}</li>" for x in z["items"])
@@ -205,7 +211,7 @@ def main_of(p):
         s = S[k][L]
         get = "".join(f"<li>{e(x)}</li>" for x in s["get"])
         body = (facts(L) + f'<section class="blk"><h2>{e(u["get"])}</h2><ul class="get">{get}</ul></section>'
-                + f'<p class="proof">{e(s["proof"])}</p>' + gallery(k))
+                + f'<p class="proof">{e(s["proof"])}</p>' + isiv_blk(k, L) + gallery(k))
         if s["price"] != "none":
             body += prices(L, s["price"]) + steps(L)
         return body + faq_blk(L, s["faq"]) + form_blk(p, k)
@@ -410,6 +416,8 @@ h1,h2,h3{text-wrap:balance}
 h1{font-family:var(--display);font-weight:var(--dw);letter-spacing:var(--dls);font-size:clamp(38px,7.2vw,84px);line-height:1.02;margin:0 0 20px;max-width:15ch}
 [data-seg="vestuves"] h1,[data-seg="jubiliejai"] h1{font-size:clamp(46px,8.4vw,100px);font-style:italic;line-height:.98}
 .sukis{font-family:var(--display);font-style:italic;font-size:clamp(20px,2.6vw,28px);line-height:1.3;color:var(--accent);margin:-6px 0 18px;max-width:34ch}
+.isiv{margin:0;padding-left:1.3em;display:grid;gap:12px;font-family:var(--display);font-size:clamp(19px,2.2vw,24px);line-height:1.35}
+.isiv li::marker{color:var(--accent);font-weight:700}
 .lead{font-size:clamp(18px,2.1vw,21px);max-width:58ch;margin:0 0 26px;color:var(--ink)}
 .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
 .btn{display:inline-flex;align-items:center;gap:8px;font:700 15px/1 var(--body);padding:14px 20px;border-radius:99px;border:1.5px solid var(--accent);color:var(--ink);text-decoration:none;background:transparent;cursor:pointer;transition:transform .15s,background .2s}

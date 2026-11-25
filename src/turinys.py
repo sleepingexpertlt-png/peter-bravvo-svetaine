@@ -519,6 +519,28 @@ SUKIS = {
  "balsas": {"lt": "Balsas, kurį jau girdėjote – dabar jūsų žinutei.", "pl": "Głos, który już znacie – teraz dla Waszego przekazu.", "ru": "Голос, который вы уже слышали, – теперь для вашего сообщения.", "en": "A voice you've already heard, now for your message."},
 }
 
+# Įsivaizdavimo klausimai (klientas atsako mintyse -> įsimena ir grįžta). Rodomi šventės puslapyje.
+ISIV = {
+ "vestuves": {
+  "lt": ("Prieš mums susitinkant – 5 klausimai sau", ["Ką norite jausti savo vestuvių rytą?", "Kokį vieną vakaro momentą norėtumėte prisiminti po 20 metų?", "Kas iš svečių turi juoktis garsiausiai?", "Kokia daina turi skambėti, kai įeisite į salę?", "Kokiais žodžiais svečiai apibūdins jūsų vestuves kitą dieną?"]),
+  "pl": ("Zanim się spotkamy – 5 pytań do siebie", ["Co chcecie czuć rano w dniu ślubu?", "Jaką jedną chwilę wieczoru chcielibyście pamiętać za 20 lat?", "Kto z gości ma śmiać się najgłośniej?", "Jaka piosenka ma zabrzmieć, gdy wejdziecie na salę?", "Jakimi słowami goście opiszą Wasze wesele następnego dnia?"]),
+  "ru": ("Перед нашей встречей – 5 вопросов себе", ["Что вы хотите чувствовать утром в день свадьбы?", "Какой один момент вечера вы хотели бы помнить через 20 лет?", "Кто из гостей должен смеяться громче всех?", "Какая песня должна звучать, когда вы войдёте в зал?", "Какими словами гости опишут вашу свадьбу на следующий день?"]),
+  "en": ("Before we meet: 5 questions for yourselves", ["What do you want to feel on the morning of your wedding?", "Which one moment of the evening would you like to remember in 20 years?", "Which guest should laugh the loudest?", "Which song should play as you walk into the room?", "What words will your guests use to describe your wedding the next day?"]),
+ },
+ "jubiliejai": {
+  "lt": ("3 klausimai prieš šventę", ["Kokią istoriją apie jubiliatą turėtų išgirsti visi svečiai?", "Kas labiausiai nustebins jubiliatą?", "Ką jubiliatas turi jausti, kai šventė baigsis?"]),
+  "pl": ("3 pytania przed uroczystością", ["Jaką historię o jubilacie powinni usłyszeć wszyscy goście?", "Co najbardziej zaskoczy jubilata?", "Co jubilat ma czuć, gdy uroczystość się skończy?"]),
+  "ru": ("3 вопроса перед праздником", ["Какую историю о юбиляре должны услышать все гости?", "Что больше всего удивит юбиляра?", "Что юбиляр должен чувствовать, когда праздник закончится?"]),
+  "en": ("3 questions before the party", ["Which story about the guest of honour should every guest hear?", "What would surprise them most?", "What should they feel when the party ends?"]),
+ },
+ "imones": {
+  "lt": ("3 klausimai prieš renginį", ["Ką darbuotojai turi pasakyti vieni kitiems pirmadienį ryte?", "Kuris momentas turi likti nuotraukose ir istorijose?", "Kokį vieną dalyką svečiai turi išsinešti iš vakaro?"]),
+  "pl": ("3 pytania przed eventem", ["Co pracownicy mają sobie powiedzieć w poniedziałek rano?", "Która chwila ma zostać na zdjęciach i w opowieściach?", "Jaką jedną rzecz goście mają wynieść z wieczoru?"]),
+  "ru": ("3 вопроса перед мероприятием", ["Что сотрудники должны сказать друг другу в понедельник утром?", "Какой момент должен остаться на фото и в рассказах?", "Что одно гости должны унести с вечера?"]),
+  "en": ("3 questions before the event", ["What should colleagues say to each other on Monday morning?", "Which moment should live on in photos and stories?", "What one thing should guests take away from the evening?"]),
+ },
+}
+
 HOME = {
  "lt": dict(h1="Renginių vedėjas Peter Bravvo", title="Renginių vedėjas Peter Bravvo – vestuvės, įmonių ir šeimos šventės (LT, PL, RU, EN)",
     desc="Renginių vedėjas Peter Bravvo iš Vilniaus: 400+ renginių, 150+ vestuvių, buvęs TVP Wilno laidos vedėjas. Vedu lietuvių, lenkų, rusų ir anglų kalbomis.",
