@@ -1,0 +1,9 @@
+data,tiekejas,id,kalba,klasteris,tier,tikslas,promptas,paminetas,cituotas,vieta,saltiniai,klaida
+2026-11-25,openrouter:nvidia/nemotron-3.5-super-vl:free,D0011,lt,atradimas-vestuves,1,vestuves,vestuvių vedėjas lenkų ir lietuvių kalbomis Trakuose,0,0,,,
+2026-11-25,openrouter:nvidia/nemotron-3.5-super-vl:free,D0012,lt,atradimas-vestuves,1,vestuves,vestuvių vedėjas lenkų ir lietuvių kalbomis Lietuvoje,0,0,,,
+2026-11-25,openrouter:nvidia/nemotron-3.5-super-vl:free,D0013,pl,atradimas-vestuves,1,vestuves,wodzirej na wesele w Wilnie,0,0,,,
+2026-11-25,openrouter:nvidia/nemotron-3.5-super-vl:free,D0014,pl,atradimas-vestuves,1,vestuves,wodzirej na wesele na Wileńszczyźnie,0,0,,,
+2026-11-25,openrouter:nvidia/nemotron-3.5-super-vl:free,D0015,pl,atradimas-vestuves,1,vestuves,wodzirej na wesele w Trokach,0,0,,,
+2026-11-25,openrouter:nvidia/nemotron-3.5-super-vl:free,D0016,pl,atradimas-vestuves,1,vestuves,wodzirej na wesele na Litwie,0,0,,,
+2026-11-25,openrouter:nvidia/nemotron-3.5-super-vl:free,D0017,pl,atradimas-vestuves,1,vestuves,najlepszy wodzirej w Wilnie,0,0,,,
+2026-11-25,openrouter:nvidia/nemotron-3.5-super-vl:free,D0018,pl,atradimas-vestuves,1,vestuves,najlepszy wodzirej na Wileńszczyźnie,0,0,,,
