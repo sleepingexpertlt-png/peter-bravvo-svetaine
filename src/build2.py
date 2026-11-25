@@ -4,7 +4,7 @@ Paleidimas: python3 build2.py  ->  dist2/ (tikri URL) + preview2.html (vienas fa
 Nuotraukos: įdėkite JPG/WEBP į foto/<segmentas>/ (vestuves, imones, ...) ir paleiskite iš naujo – galerija atsiras pati.
 """
 import datetime, glob, html, json, os, re, shutil, urllib.parse
-BUILD_DATE = datetime.date.today().isoformat()
+BUILD_DATE = "2026-11-25"  # pastovi data, kad FTP keltų tik tikrai pakeistus failus
 from turinys import LANGS, SEGS, SLUG, UI, S, HOME, ABOUT, CONTACT, TEMA, POZ, SUKIS, ISIV
 TH = lambda sg: TEMA.get(sg, sg)
 
