@@ -167,7 +167,7 @@ PDESC = {"lt": "Laida „Wileńszczyzna w obiektywie“ – portretas apie rengi
          "pl": "Program „Wileńszczyzna w obiektywie” – autoportret wodzireja Piotra Andrzejewskiego (Peter Bravvo): jego droga, scena i telewizja.",
          "ru": "Программа «Wileńszczyzna w obiektywie» – портрет ведущего Петра Анджеевского (Peter Bravvo): его путь, сцена и телевидение.",
          "en": "The programme “Wileńszczyzna w obiektywie” – a self-portrait of event host Piotr Andrzejewski (Peter Bravvo): his path, the stage and television."}
-PT = "Wileńszczyzna w obiektywie: portret własny – Piotr Andrzejewski"
+PT = "Wileńszczyzna w obiektywie. Portret własny | Piotr Andrzejewski"
 PTITLE = {"lt": PT, "pl": PT, "ru": PT, "en": PT}
 
 
@@ -181,13 +181,67 @@ def portret_video(L):
             "sameAs": ["https://wilno.tvp.pl/92778412/wilenszczyzna-w-obiektywie-portret-wlasny-piotr-andrzejewski-73"]}
 
 
-def video_blk(L, only=None):
-    vs = [v for v in VIDS if not only or v[0] in only]
-    vs = sorted(((i, PTITLE[L] if i == PORTRET else t) for i, t in vs), key=lambda v: v[0] != PORTRET)
+YTV = json.load(open(os.path.join(ROOT, "youtube.json"), encoding="utf-8")) if os.path.exists(os.path.join(ROOT, "youtube.json")) else []
+VALL = {i: {"id": i, "title": t, "date": "", "desc": ""} for i, t in VIDS}
+VALL.update({v["id"]: v for v in YTV})
+VSEL = {"home": [PORTRET, "DvuKhaxvnPE", "iLe4TVgeHQs", "Z_1gFwtpLDY"], "apie": [PORTRET, "znb1ARwL58M", "iLe4TVgeHQs", "6fbxmxgFS9M"],
+        "vestuves": ["DvuKhaxvnPE", "Z_1gFwtpLDY", "02K66qPmm5U", "P-LvUTmYTaY", "N3YaAnCyk4E", "GNGaDyQxRDU", "dUy5_xJk3Kg"],
+        "imones": ["iLe4TVgeHQs", PORTRET, "znb1ARwL58M"], "parodos": ["iLe4TVgeHQs", PORTRET, "znb1ARwL58M"],
+        "jubiliejai": ["B9zq_YWvztI", "INU3tO5VePw", "iLe4TVgeHQs"], "seimos": ["B9zq_YWvztI", "DvuKhaxvnPE", PORTRET],
+        "jaunimas": ["DvuKhaxvnPE", "9AgHbyIBgY0", "6fbxmxgFS9M"], "miestas": ["yxIZjIzUVbc", "iLe4TVgeHQs", PORTRET],
+        "balsas": ["znb1ARwL58M", PORTRET, "iLe4TVgeHQs"]}
+
+
+def vsel(key):
+    return [VALL[i] for i in VSEL.get(key, [PORTRET]) if i in VALL]
+
+
+def vtitle(v, L):
+    return PTITLE[L] if v["id"] == PORTRET else v["title"]
+
+
+def video_blk(L, key="home"):
+    vs = vsel(key)
     if not vs:
         return ""
-    cards = "".join(f'<button class="yt" type="button" data-id="{i}" aria-label="▶ {e(t)}"><img src="https://i.ytimg.com/vi/{i}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><span class="yt-p" aria-hidden="true"></span><span class="yt-t">{e(t)}</span></button>' for i, t in vs)
-    return f'<section class="blk"><h2>{e(VTIT[L])}</h2><div class="yts">{cards}</div></section>'
+    cards = "".join(f'<button class="yt" type="button" data-id="{v["id"]}" aria-label="▶ {e(vtitle(v, L))}"><img src="https://i.ytimg.com/vi/{v["id"]}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><span class="yt-p" aria-hidden="true"></span><span class="yt-t">{e(vtitle(v, L))}</span></button>' for v in vs)
+    more = f'<p class="proof"><a href="{F["profiles"]["youtube"]}" rel="noopener">YouTube: Bravvo BAND →</a></p>'
+    return f'<section class="blk"><h2>{e(VTIT[L])}</h2><div class="yts">{cards}</div>{more}</section>'
+
+
+def video_nodes(key, L):
+    out = []
+    for v in vsel(key):
+        if v["id"] == PORTRET:
+            continue
+        n = {"@type": "VideoObject", "@id": f"https://www.youtube.com/watch?v={v['id']}", "name": v["title"],
+             "description": (v.get("desc") or v["title"])[:300], "thumbnailUrl": f"https://i.ytimg.com/vi/{v['id']}/hqdefault.jpg",
+             "embedUrl": f"https://www.youtube.com/embed/{v['id']}", "url": f"https://www.youtube.com/watch?v={v['id']}", "actor": {"@id": PID}}
+        if v.get("date"):
+            n["uploadDate"] = v["date"]
+            n["author"] = {"@id": PID}
+        out.append(n)
+    return out
+
+
+SOCT = {"lt": "Sekite Piotrą", "pl": "Obserwuj Piotra", "ru": "Следите за Петром", "en": "Follow Peter"}
+SOCD = {"lt": ["Nuotraukos ir istorijos", "Renginiai ir naujienos", "Video iš švenčių", "Atsiliepimai", "Parašykite"],
+        "pl": ["Zdjęcia i relacje", "Imprezy i nowości", "Wideo z imprez", "Opinie", "Napisz"],
+        "ru": ["Фото и истории", "События и новости", "Видео с праздников", "Отзывы", "Напишите"],
+        "en": ["Photos and stories", "Events and news", "Videos from events", "Reviews", "Message"]}
+ICO = {"ig": '<path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-1.2a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/>',
+       "fb": '<path d="M14 8V6.3c0-.8.2-1.3 1.4-1.3H17V2h-2.6C11.5 2 10.6 3.8 10.6 6v2H8v3h2.6v11H14V11h2.7l.4-3z"/>',
+       "yt": '<path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9l5.8 3.1z"/>',
+       "g": '<path d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3zM12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22zM6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1a10 10 0 0 0 0 9.2zM12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z"/>',
+       "wa": '<path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.2-.7-2.7-1.1-4.4-3.8-4.5-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/>'}
+
+
+def social_blk(L):
+    items = [("ig", "Instagram", "@peter_bravvo", F["profiles"]["instagram"]), ("fb", "Facebook", "PeterBravvo", F["profiles"]["facebook"]),
+             ("yt", "YouTube", "Bravvo BAND", F["profiles"]["youtube"]), ("g", "Google", "39", GBP), ("wa", "WhatsApp", TEL, "https://wa.me/" + TEL_RAW.lstrip("+"))]
+    cards = "".join(f'<a class="soc soc-{k}" href="{u}" rel="noopener" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true">{ICO[k]}</svg><b>{n}</b><span>{e(h)}</span><i>{e(SOCD[L][ix])}</i></a>'
+                    for ix, (k, n, h, u) in enumerate(items))
+    return f'<section class="blk socs-w wrap"><h2>{e(SOCT[L])}</h2><div class="socs">{cards}</div></section>'
 
 
 def hero_foto(p):
@@ -255,18 +309,18 @@ def events_graph():
 def main_of(p):
     L, k, u = p["lang"], p["key"], UI[p["lang"]]
     if p["kind"] == "home":
-        return facts(L) + poz_blk(L) + segcards(L) + video_blk(L) + style_blk(L) + prices(L, "even") + steps(L) + press_blk(L, False) + form_blk(p, "vestuves")
+        return facts(L) + poz_blk(L) + segcards(L) + video_blk(L, "home") + style_blk(L) + prices(L, "even") + steps(L) + press_blk(L, False) + form_blk(p, "vestuves")
     if p["kind"] == "seg":
         s = S[k][L]
         get = "".join(f"<li>{e(x)}</li>" for x in s["get"])
         body = (facts(L) + f'<section class="blk"><h2>{e(u["get"])}</h2><ul class="get">{get}</ul></section>'
-                + f'<p class="proof">{e(s["proof"])}</p>' + isiv_blk(k, L) + gallery(k, L) + (video_blk(L) if k in ("miestas", "balsas", "imones", "parodos") else ""))
+                + f'<p class="proof">{e(s["proof"])}</p>' + isiv_blk(k, L) + gallery(k, L) + video_blk(L, k))
         if s["price"] != "none":
             body += prices(L, s["price"]) + steps(L)
         return body + faq_blk(L, s["faq"]) + form_blk(p, k)
     if p["kind"] == "about":
         paras = "".join(f'<p>{e(x)}</p>' for x in ABOUT[L]["paras"])
-        return facts(L) + f'<section class="blk measure prose">{paras}</section>' + gallery("apie", L) + video_blk(L) + style_blk(L) + press_blk(L, True) + form_blk(p, "vestuves")
+        return facts(L) + f'<section class="blk measure prose">{paras}</section>' + gallery("apie", L) + video_blk(L, "apie") + style_blk(L) + press_blk(L, True) + form_blk(p, "vestuves")
     if p["kind"] == "hub":
         cards = "".join(f'<a class="segcard" data-seg="{BYID[f"{L}-{d['key']}"]["seg"]}" href="{LINK(f"{L}-{d['key']}")}"><span class="sc-k">{e(d[L]["h1"])}</span>'
                         f'<span class="sc-t">{e(d[L]["desc"])}</span><span class="sc-go">{e(ZUI[L]["read"])} →</span></a>' for d in ZART)
@@ -327,6 +381,7 @@ def section_html(p):
 <h1{' class="long"' if len(p['h1'])>30 else ''}>{e(p["h1"])}</h1>{sukis_of(p)}<p class="lead">{e(lead_of(p))}</p>{ctas(L, p["id"])}{reviews(L)}</div></div>
 {chooser(p)}
 <main class="wrap">{main_of(p)}</main>
+{social_blk(L)}
 <footer class="foot wrap"><p><b>{e(F["brand"])}</b> · {e(u["foot"])}</p><p><a href="tel:{TEL_RAW}">{e(TEL)}</a> · <a href="mailto:{EMAIL}">{e(EMAIL)}</a> · <a href="{F["profiles"]["instagram"]}" rel="noopener">Instagram</a> · <a href="{F["profiles"]["facebook"]}" rel="noopener">Facebook</a> · <a href="{F["profiles"]["youtube"]}" rel="noopener">YouTube</a> · <a href="{GBP}" rel="noopener">Google</a></p></footer>
 </section>'''
 
@@ -403,6 +458,9 @@ def graph_for(p):
         wp["mainEntity"] = {"@id": url + "#article"}
         faq = [(x["q"], x["a"]) for x in a.get("faq", [])]
     g.append(portret_video(L))
+    vk = p["key"] if p["kind"] in ("seg", "home") else ("apie" if p["kind"] == "about" else None)
+    if vk:
+        g += video_nodes(vk, L)
     if faq:
         g.append({"@type": "FAQPage", "@id": url + "#faq", "inLanguage": L,
                   "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
@@ -577,6 +635,11 @@ html{scroll-behavior:smooth}
 .yt-t{position:absolute;left:0;right:0;bottom:0;padding:22px 12px 10px;font:600 14px/1.3 var(--body);background:linear-gradient(transparent,rgba(0,0,0,.8))}
 .yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .globe{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}.hero-in{position:relative;z-index:1}
+.socs-w{max-width:1080px;margin-left:auto;margin-right:auto;padding-left:20px;padding-right:20px}.socs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.soc{position:relative;display:grid;grid-template-columns:40px 1fr;gap:2px 12px;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff;overflow:hidden;transition:transform .25s ease,box-shadow .25s ease}
+.soc:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.soc svg{grid-row:1/4;width:40px;height:40px;fill:#fff}.soc b{font:700 16px/1.1 var(--body)}.soc span{font:600 13px/1.2 var(--body);opacity:.9}.soc i{font:400 12px/1.2 var(--body);font-style:normal;opacity:.8}
+.soc-ig{background:linear-gradient(45deg,#f9ce34,#ee2a7b 45%,#6228d7)}.soc-fb{background:#1877f2}.soc-yt{background:#e62117}.soc-g{background:#fff;color:#202124;border:1px solid var(--line)}.soc-g svg{fill:#4285f4}.soc-wa{background:#25d366;color:#06301a}.soc-wa svg{fill:#06301a}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}.hero-foto img{animation:none}}
 @view-transition{navigation:auto}
 """
