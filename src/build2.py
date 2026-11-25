@@ -158,6 +158,18 @@ def gallery(seg, L="lt"):
     return f'<section class="blk"><div class="gal">{figs}</div></section>'
 
 
+VTIT = {"lt": "Pažiūrėkite ir paklausykite", "pl": "Zobaczcie i posłuchajcie", "ru": "Посмотрите и послушайте", "en": "Watch and listen"}
+VIDS = [(x["url"].split("v=")[1], x["t"]) for x in F["press"] if x.get("type") == "video" and "v=" in x["url"]]
+
+
+def video_blk(L, only=None):
+    vs = [v for v in VIDS if not only or v[0] in only]
+    if not vs:
+        return ""
+    cards = "".join(f'<button class="yt" type="button" data-id="{i}" aria-label="▶ {e(t)}"><img src="https://i.ytimg.com/vi/{i}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><span class="yt-p" aria-hidden="true"></span><span class="yt-t">{e(t)}</span></button>' for i, t in vs)
+    return f'<section class="blk"><h2>{e(VTIT[L])}</h2><div class="yts">{cards}</div></section>'
+
+
 def hero_foto(p):
     if not FOTOJ["hero"]:
         return ""
@@ -223,18 +235,18 @@ def events_graph():
 def main_of(p):
     L, k, u = p["lang"], p["key"], UI[p["lang"]]
     if p["kind"] == "home":
-        return facts(L) + poz_blk(L) + segcards(L) + style_blk(L) + prices(L, "even") + steps(L) + press_blk(L, False) + form_blk(p, "vestuves")
+        return facts(L) + poz_blk(L) + segcards(L) + video_blk(L) + style_blk(L) + prices(L, "even") + steps(L) + press_blk(L, False) + form_blk(p, "vestuves")
     if p["kind"] == "seg":
         s = S[k][L]
         get = "".join(f"<li>{e(x)}</li>" for x in s["get"])
         body = (facts(L) + f'<section class="blk"><h2>{e(u["get"])}</h2><ul class="get">{get}</ul></section>'
-                + f'<p class="proof">{e(s["proof"])}</p>' + isiv_blk(k, L) + gallery(k, L))
+                + f'<p class="proof">{e(s["proof"])}</p>' + isiv_blk(k, L) + gallery(k, L) + (video_blk(L) if k in ("miestas", "balsas", "imones", "parodos") else ""))
         if s["price"] != "none":
             body += prices(L, s["price"]) + steps(L)
         return body + faq_blk(L, s["faq"]) + form_blk(p, k)
     if p["kind"] == "about":
         paras = "".join(f'<p>{e(x)}</p>' for x in ABOUT[L]["paras"])
-        return facts(L) + f'<section class="blk measure prose">{paras}</section>' + gallery("apie", L) + style_blk(L) + press_blk(L, True) + form_blk(p, "vestuves")
+        return facts(L) + f'<section class="blk measure prose">{paras}</section>' + gallery("apie", L) + video_blk(L) + style_blk(L) + press_blk(L, True) + form_blk(p, "vestuves")
     if p["kind"] == "hub":
         cards = "".join(f'<a class="segcard" data-seg="{BYID[f"{L}-{d['key']}"]["seg"]}" href="{LINK(f"{L}-{d['key']}")}"><span class="sc-k">{e(d[L]["h1"])}</span>'
                         f'<span class="sc-t">{e(d[L]["desc"])}</span><span class="sc-go">{e(ZUI[L]["read"])} →</span></a>' for d in ZART)
@@ -529,6 +541,20 @@ main{padding-top:8px}
 /* forma: etiketė virš lauko, poromis */
 @media (max-width:820px){.facts{grid-template-columns:repeat(2,1fr)}.facts div:last-child{grid-column:1/-1}.steps{grid-template-columns:repeat(2,1fr)}.prices{grid-template-columns:1fr}.press{columns:1}}
 @media (max-width:560px){body{font-size:16px}.get{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.ask{grid-template-columns:1fr}.gal{grid-template-columns:repeat(2,1fr)}.hero{padding:100px 0 40px}.topr>a{display:none}}
+html{scroll-behavior:smooth}
+.fx .rv{opacity:0;transform:translateY(34px) scale(.985);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.fx .rv.in{opacity:1;transform:none}
+.hero-foto{right:-24px;width:calc(48% + 48px);will-change:transform;transition:transform .25s ease-out}
+.fx .gal img{transform:translate(var(--tx,0),var(--ty,0)) scale(1.1);transition:transform .4s ease-out,filter .6s ease}
+.fx .gal figure:hover img{transform:translate(var(--tx,0),var(--ty,0)) scale(1.16)}
+@media (max-width:860px){.hero-foto{right:-24px;width:calc(100% + 48px);left:auto}}
+.yts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.yt{position:relative;display:block;padding:0;border:0;border-radius:12px;overflow:hidden;cursor:pointer;background:#000;aspect-ratio:16/9;font:inherit;color:#fff;text-align:left}
+.yt img{width:100%;height:100%;object-fit:cover;opacity:.85;transition:transform .5s ease,opacity .3s}.yt:hover img{transform:scale(1.05);opacity:1}
+.yt-p{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:var(--accent)}
+.yt-p::after{content:"";position:absolute;left:26px;top:20px;border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent var(--on-accent)}
+.yt-t{position:absolute;left:0;right:0;bottom:0;padding:22px 12px 10px;font:600 14px/1.3 var(--body);background:linear-gradient(transparent,rgba(0,0,0,.8))}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}.hero-foto img{animation:none}}
 @view-transition{navigation:auto}
 """
@@ -593,6 +619,8 @@ function start(sec){
 window.PBscene=start;
 var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){start(cur)},200)});
 
+document.addEventListener('click',function(ev){var y=ev.target.closest&&ev.target.closest('.yt');if(!y||y.querySelector('iframe'))return;
+ var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+y.getAttribute('data-id')+'?autoplay=1&rel=0';f.allow='autoplay; encrypted-media; picture-in-picture';f.allowFullscreen=true;f.title=y.getAttribute('aria-label');y.appendChild(f)});
 document.addEventListener('submit',function(ev){var f=ev.target;if(!f.classList||!f.classList.contains('ask'))return;ev.preventDefault();
  var mode=(ev.submitter&&ev.submitter.value)||'wa',lines=[];
  f.querySelectorAll('input,select,textarea').forEach(function(x){var lab=f.querySelector('label[for="'+x.id+'"]');if(x.value)lines.push((lab?lab.textContent:x.name)+': '+x.value)});
@@ -600,6 +628,28 @@ document.addEventListener('submit',function(ev){var f=ev.target;if(!f.classList|
  if(mode==='mail'){location.href='mailto:'+f.getAttribute('data-mail')+'?subject='+encodeURIComponent('Peter Bravvo')+'&body='+encodeURIComponent(txt)}
  else{window.open(f.getAttribute('data-wa')+'?text='+encodeURIComponent(txt),'_blank','noopener')}
 });
+/* gyvumas: atsiradimas skrolinant, paralaksas, telefono pakreipimas */
+(function(){
+ if(RM)return;
+ var de=document.documentElement;de.classList.add('fx');
+ var els=document.querySelectorAll('.pg main .blk,.pg main .proof,.gal figure,.segcard');
+ els.forEach(function(x,i){x.classList.add('rv');if(x.tagName==='FIGURE')x.style.transitionDelay=((i%3)*90)+'ms'});
+ if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{rootMargin:'0px 0px -8% 0px'});els.forEach(function(x){io.observe(x)})}
+ else els.forEach(function(x){x.classList.add('in')});
+ var hf=document.querySelector('.hero-foto'),tx=0,ty=0,sy=0,tick=false;
+ function paint(){tick=false;
+  if(hf)hf.style.transform='translate3d('+(tx*18).toFixed(1)+'px,'+(sy*0.25+ty*14).toFixed(1)+'px,0)';
+  de.style.setProperty('--tx',(tx*10).toFixed(1)+'px');de.style.setProperty('--ty',(ty*10).toFixed(1)+'px');}
+ function ask(){if(!tick){tick=true;requestAnimationFrame(paint)}}
+ addEventListener('scroll',function(){sy=Math.min(scrollY,900);ask()},{passive:true});
+ var gyro=false;function ori(e){if(e.gamma==null)return;gyro=true;tx=Math.max(-1,Math.min(1,e.gamma/25));ty=Math.max(-1,Math.min(1,(e.beta-45)/25));ask()}
+ function on(){addEventListener('deviceorientation',ori,{passive:true})}
+ if(window.DeviceOrientationEvent)on();
+ if(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'){
+  addEventListener('touchend',function f(){removeEventListener('touchend',f);DeviceOrientationEvent.requestPermission().then(function(r){if(r==='granted')on()}).catch(function(){})},{once:true});
+ }
+ addEventListener('mousemove',function(e){if(gyro||matchMedia('(hover:none)').matches)return;tx=(e.clientX/innerWidth-.5)*1.2;ty=(e.clientY/innerHeight-.5)*1.2;ask()},{passive:true});
+})();
 })();
 """
 

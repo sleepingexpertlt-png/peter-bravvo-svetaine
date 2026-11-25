@@ -28,6 +28,9 @@ jobs:
             set net:reconnect-interval-base 5;
             set net:reconnect-interval-max 30;
             set ftp:passive-mode yes;
-            mirror -R --parallel=2 --no-perms --exclude-glob CNAME --exclude-glob .nojekyll site/ $FTP_DIR/;
+            mirror -R --verbose=1 --parallel=2 --no-perms --exclude-glob CNAME --exclude-glob .nojekyll site/ $FTP_DIR/;
             bye"
           echo "Įkelta: $(find site -type f | wc -l) failų"
+          echo "--- serveryje foto/h:"; lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" -e "set ftp:ssl-allow no; cls -l $FTP_DIR/foto/h/; cls -l $FTP_DIR/index.html; bye" || true
+          echo "--- gyvai:"; curl -s https://peterbravvo.lt/ | grep -o 'hero-foto[^>]*><img src="[^"]*"' | head -1 || true
+          curl -s -o /dev/null -w "foto %{http_code} %{content_type} %{size_download}\n" https://peterbravvo.lt/foto/h/p19.webp || true
