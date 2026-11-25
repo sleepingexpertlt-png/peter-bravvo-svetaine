@@ -161,7 +161,7 @@ def form_blk(p, preset):
 <div class="fld"><label for="{f("v")}">{e(u["f_place"])}</label><input id="{f("v")}" name="vieta" autocomplete="off"></div>
 <div class="fld"><label for="{f("g")}">{e(u["f_guests"])}</label><input id="{f("g")}" name="sveciai" inputmode="numeric"></div>
 <div class="fld"><label for="{f("n")}">{e(u["f_name"])}</label><input id="{f("n")}" name="vardas" autocomplete="name"></div>
-<div class="fld wide"><label for="{f("m")}">{e(u["f_msg"])}</label><textarea id="{f("m")}" name="zinute" rows="3"></textarea></div>
+<div class="fld wide"><label for="{f("m")}">{e(ISIV[preset][L][1][0] if preset in ISIV else u["f_msg"])}</label><textarea id="{f("m")}" name="zinute" rows="3"></textarea></div>
 <div class="wide sends"><button class="btn solid" type="submit" value="wa">{e(u["f_wa"])}</button><button class="btn" type="submit" value="mail">{e(u["f_mail"])}</button></div>
 <p class="wide note">{e(u["f_note"])}</p></form></section>'''
 
