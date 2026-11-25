@@ -1,0 +1,13 @@
+name: FTP aplankų sąrašas (diagnostika)
+on: {workflow_dispatch: }
+jobs:
+  ls:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          sudo apt-get install -y -qq lftp >/dev/null
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" -e "set ftp:ssl-allow no; pwd | sed 's/u[0-9]\+/USER/g'; echo == /; cls -1F /; echo == ..; cls -1F ..; echo == ../..; cls -1F ../..; echo == domains; cls -1F /domains/ ; cls -1F ../../domains/ ; bye" 2>&1 | sed 's/u[0-9]\{6,\}/USER/g' || true
