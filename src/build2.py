@@ -780,7 +780,7 @@ def render_static(p):
     body = to_static(sec, p["path"])
     return f'''<!DOCTYPE html><html lang="{p["lang"]}" data-seg="{p["seg"]}"><head>{head_common()}
 <title>{e(p["title"])}</title><meta name="description" content="{e(p["desc"])}"><link rel="canonical" href="{url}">{alternates(p)}
-<meta property="og:type" content="{"article" if p["kind"] == "art" else "profile"}"><meta property="og:title" content="{e(p["title"])}"><meta property="og:description" content="{e(p["desc"])}"><meta property="og:url" content="{url}"><meta property="og:locale" content="{og_loc}"><meta property="og:image" content="{DOMAIN}/foto/og/{hero_key(p)}.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:type" content="{"article" if p["kind"] == "art" else "profile"}"><meta property="og:title" content="{e(p["title"])}"><meta property="og:description" content="{e(p["desc"])}"><meta property="og:url" content="{url}"><meta property="og:locale" content="{og_loc}"><meta property="og:image" content="{DOMAIN}/foto/og/{hero_key(p)}-{p["lang"]}.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{json.dumps(graph_for(p), ensure_ascii=False)}</script>
 <style>{CSS}</style></head><body>
 <a class="skip" href="#f-{p["id"]}" style="position:absolute;left:-9999px">{e(UI[p["lang"]]["skip"])}</a>
