@@ -162,8 +162,28 @@ VTIT = {"lt": "Pažiūrėkite ir paklausykite", "pl": "Zobaczcie i posłuchajcie
 VIDS = [(x["url"].split("v=")[1], x["t"]) for x in F["press"] if x.get("type") == "video" and "v=" in x["url"]]
 
 
+PORTRET = "mDnUXkfjIyk"
+PDESC = {"lt": "Laida „Wileńszczyzna w obiektywie“ – portretas apie renginių vedėją Piotrą Andrzejewskį (Peter Bravvo): jo kelias, darbas scenoje ir televizijoje.",
+         "pl": "Program „Wileńszczyzna w obiektywie” – autoportret wodzireja Piotra Andrzejewskiego (Peter Bravvo): jego droga, scena i telewizja.",
+         "ru": "Программа «Wileńszczyzna w obiektywie» – портрет ведущего Петра Анджеевского (Peter Bravvo): его путь, сцена и телевидение.",
+         "en": "The programme “Wileńszczyzna w obiektywie” – a self-portrait of event host Piotr Andrzejewski (Peter Bravvo): his path, the stage and television."}
+PT = "Wileńszczyzna w obiektywie: portret własny – Piotr Andrzejewski"
+PTITLE = {"lt": PT, "pl": PT, "ru": PT, "en": PT}
+
+
+def portret_video(L):
+    return {"@type": "VideoObject", "@id": DOMAIN + "/#video-portret", "name": PTITLE[L], "description": PDESC[L],
+            "inLanguage": "pl", "thumbnailUrl": [f"https://i.ytimg.com/vi/{PORTRET}/hqdefault.jpg", f"https://i.ytimg.com/vi/{PORTRET}/maxresdefault.jpg"],
+            "embedUrl": f"https://www.youtube.com/embed/{PORTRET}", "contentUrl": f"https://www.youtube.com/watch?v={PORTRET}",
+            "url": f"https://www.youtube.com/watch?v={PORTRET}", "about": {"@id": PID}, "actor": {"@id": PID},
+            "genre": "Documentary portrait", "isFamilyFriendly": True,
+            "partOfSeries": {"@type": "TVSeries", "name": "Wileńszczyzna w obiektywie", "productionCompany": {"@type": "Organization", "name": "TVP Wilno"}},
+            "sameAs": ["https://wilno.tvp.pl/92778412/wilenszczyzna-w-obiektywie-portret-wlasny-piotr-andrzejewski-73"]}
+
+
 def video_blk(L, only=None):
     vs = [v for v in VIDS if not only or v[0] in only]
+    vs = sorted(((i, PTITLE[L] if i == PORTRET else t) for i, t in vs), key=lambda v: v[0] != PORTRET)
     if not vs:
         return ""
     cards = "".join(f'<button class="yt" type="button" data-id="{i}" aria-label="▶ {e(t)}"><img src="https://i.ytimg.com/vi/{i}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><span class="yt-p" aria-hidden="true"></span><span class="yt-t">{e(t)}</span></button>' for i, t in vs)
@@ -324,7 +344,7 @@ def graph_for(p):
               "alumniOf": {"@type": "CollegeOrUniversity", "name": "John Paul II Catholic University of Lublin"},
               "sameAs": SAME,
               "image": [{"@type": "ImageObject", "url": f"{DOMAIN}/foto/h/p{n:02d}.webp", "caption": ALT[L]} for n in sorted(set(FOTOJ["hero"].values()))],
-              "subjectOf": [{"@type": "Article" if x["type"] in ("about", "mention") else "CreativeWork", "name": x["t"], "url": x["url"],
+              "subjectOf": [{"@id": DOMAIN + "/#video-portret"}] + [{"@type": "Article" if x["type"] in ("about", "mention") else "CreativeWork", "name": x["t"], "url": x["url"],
                              "publisher": {"@type": "Organization", "name": x["src"]}} for x in F["press"] if x["type"] in ("about", "mention", "project")],
               "contactPoint": {"@type": "ContactPoint", "contactType": "bookings", "telephone": TEL_RAW, "email": EMAIL, "availableLanguage": F["languages"]},
               "description": POZ[L]["h"] + ". " + POZ[L]["p"],
@@ -382,6 +402,7 @@ def graph_for(p):
                   "isPartOf": {"@id": DOMAIN + ZBASE[L] + "#webpage"}})
         wp["mainEntity"] = {"@id": url + "#article"}
         faq = [(x["q"], x["a"]) for x in a.get("faq", [])]
+    g.append(portret_video(L))
     if faq:
         g.append({"@type": "FAQPage", "@id": url + "#faq", "inLanguage": L,
                   "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
@@ -548,7 +569,7 @@ html{scroll-behavior:smooth}
 .fx .gal img{transform:translate(var(--tx,0),var(--ty,0)) scale(1.1);transition:transform .4s ease-out,filter .6s ease}
 .fx .gal figure:hover img{transform:translate(var(--tx,0),var(--ty,0)) scale(1.16)}
 @media (max-width:860px){.hero-foto{right:-24px;width:calc(100% + 48px);left:auto}}
-.yts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.yts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.yts .yt:first-child{grid-column:1/-1}
 .yt{position:relative;display:block;padding:0;border:0;border-radius:12px;overflow:hidden;cursor:pointer;background:#000;aspect-ratio:16/9;font:inherit;color:#fff;text-align:left}
 .yt img{width:100%;height:100%;object-fit:cover;opacity:.85;transition:transform .5s ease,opacity .3s}.yt:hover img{transform:scale(1.05);opacity:1}
 .yt-p{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:var(--accent)}
