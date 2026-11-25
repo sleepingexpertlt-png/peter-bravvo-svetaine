@@ -1,0 +1,30 @@
+name: Įkelti į Hostinger (FTP)
+on:
+  push:
+    branches: [main]
+    paths: ["site/**"]
+  workflow_dispatch:
+jobs:
+  ikelti:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ar yra FTP prisijungimas
+        id: chk
+        env:
+          S: ${{ secrets.FTP_SERVER }}
+        run: if [ -n "$S" ]; then echo "ok=1" >> "$GITHUB_OUTPUT"; else echo "FTP sekretų nėra – praleidžiu"; fi
+      - name: Įkelti site/ į public_html
+        if: steps.chk.outputs.ok == '1'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./site/
+          server-dir: ${{ vars.FTP_DIR || 'public_html/' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            CNAME
+            .nojekyll
