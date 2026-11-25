@@ -6,7 +6,7 @@ on:
     inputs:
       batch:
         description: "Kiek promptų šį kartą"
-        default: "45"
+        default: "90"
 permissions:
   contents: write
 concurrency:
@@ -24,9 +24,10 @@ jobs:
         env:
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_API_KEY_2: ${{ secrets.OPENROUTER_API_KEY_2 }}
           OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          BATCH: ${{ github.event.inputs.batch || '45' }}
+          BATCH: ${{ github.event.inputs.batch || '90' }}
           MAX_USD: "1.0"
         run: python aeo/aeo_bot.py
       - name: Išsaugoti rezultatus

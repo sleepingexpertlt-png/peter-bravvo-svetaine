@@ -80,7 +80,16 @@ def ask(prov, lang, q):
     name, url, key, model, _ = prov
     body = {"model": model, "messages": [{"role": "system", "content": SYS.get(lang, SYS["en"])}, {"role": "user", "content": q}],
             "max_tokens": 700, "temperature": 0.2}
-    r = post(url, key, body)
+    keys = [key]
+    if "openrouter" in url and os.environ.get("OPENROUTER_API_KEY_2"):
+        keys.append(os.environ["OPENROUTER_API_KEY_2"])
+    for i, k in enumerate(keys):
+        try:
+            r = post(url, k, body); break
+        except urllib.error.HTTPError as ex:
+            if ex.code in (402, 429) and i + 1 < len(keys):
+                continue  # dienos limitas – bandome antrą raktą
+            raise
     text = (r.get("choices") or [{}])[0].get("message", {}).get("content", "") or ""
     cites = list(r.get("citations") or [])
     for sr in r.get("search_results") or []:

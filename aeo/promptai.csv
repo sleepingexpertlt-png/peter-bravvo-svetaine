@@ -1067,3 +1067,63 @@ K183-lt,lt,balsas,2,z-igarsinimas,Kaip vyksta įgarsinimas studijoje?
 K183-pl,pl,balsas,2,z-igarsinimas,Jak wygląda nagranie w studiu?
 K183-ru,ru,balsas,2,z-igarsinimas,Как проходит озвучка в студии?
 K183-en,en,balsas,2,z-igarsinimas,What happens in a voice-over recording session?
+E01-lt,lt,emocija-artumas,2,z-artumas,Kaip sukurti artumo jausmą tarp svečių vestuvėse?
+E01-pl,pl,emocija-artumas,2,z-artumas,Jak stworzyć poczucie bliskości między gośćmi na weselu?
+E01-ru,ru,emocija-artumas,2,z-artumas,Как создать атмосферу близости между гостями на свадьбе?
+E01-en,en,emocija-artumas,2,z-artumas,How to create a sense of closeness among wedding guests?
+E02-lt,lt,emocija-artumas,2,z-dvikalbes-vestuves,"Kaip sujungti dvi šeimas vestuvėse, kad jaustųsi kaip viena?"
+E02-pl,pl,emocija-artumas,2,z-dvikalbes-vestuves,"Jak połączyć dwie rodziny na weselu, żeby poczuły się jak jedna?"
+E02-ru,ru,emocija-artumas,2,z-dvikalbes-vestuves,"Как объединить две семьи на свадьбе, чтобы они почувствовали себя одной?"
+E02-en,en,emocija-artumas,2,z-dvikalbes-vestuves,How to bring two families together at a wedding so they feel like one?
+E03-lt,lt,emocija-artumas,2,z-artumas,Kaip nusiraminti vestuvių rytą?
+E03-pl,pl,emocija-artumas,2,z-artumas,Jak się uspokoić rano w dniu ślubu?
+E03-ru,ru,emocija-artumas,2,z-artumas,Как успокоиться утром в день свадьбы?
+E03-en,en,emocija-artumas,2,z-artumas,How to stay calm on the morning of your wedding?
+E04-lt,lt,emocija-artumas,2,z-artumas,"Kaip padaryti, kad svečiai vestuvėse jaustųsi kaip namie?"
+E04-pl,pl,emocija-artumas,2,z-artumas,"Jak sprawić, żeby goście na weselu czuli się jak w domu?"
+E04-ru,ru,emocija-artumas,2,z-artumas,"Как сделать, чтобы гости на свадьбе чувствовали себя как дома?"
+E04-en,en,emocija-artumas,2,z-artumas,How to make wedding guests feel at home?
+E05-lt,lt,emocija-artumas,2,z-artumas,Kuri vestuvių akimirka įsimenama ilgiausiai?
+E05-pl,pl,emocija-artumas,2,z-artumas,Który moment wesela zapamiętuje się najdłużej?
+E05-ru,ru,emocija-artumas,2,z-artumas,Какой момент свадьбы запоминается дольше всего?
+E05-en,en,emocija-artumas,2,z-artumas,Which wedding moment do people remember longest?
+E06-lt,lt,emocija-artumas,2,z-artumas,"Kaip įtraukti svečius, kurie vienas kito nepažįsta?"
+E06-pl,pl,emocija-artumas,2,z-artumas,"Jak zaangażować gości, którzy się nie znają?"
+E06-ru,ru,emocija-artumas,2,z-artumas,"Как вовлечь гостей, которые не знают друг друга?"
+E06-en,en,emocija-artumas,2,z-artumas,How to involve guests who don't know each other?
+E07-lt,lt,emocija-artumas,2,vestuves,Ar vestuvių vedėjas gali tapti draugu šventėje?
+E07-pl,pl,emocija-artumas,2,vestuves,Czy wodzirej może stać się przyjacielem na weselu?
+E07-ru,ru,emocija-artumas,2,vestuves,Может ли ведущий стать другом на свадьбе?
+E07-en,en,emocija-artumas,2,vestuves,Can a wedding host feel like a friend at the party?
+E08-lt,lt,emocija-artumas,2,z-artumas,"Kaip vestuves padaryti jaukias, o ne oficialias?"
+E08-pl,pl,emocija-artumas,2,z-artumas,"Jak sprawić, żeby wesele było przytulne, a nie oficjalne?"
+E08-ru,ru,emocija-artumas,2,z-artumas,"Как сделать свадьбу уютной, а не официальной?"
+E08-en,en,emocija-artumas,2,z-artumas,How to make a wedding feel cosy rather than formal?
+E09-lt,lt,emocija-artumas,2,z-vestuviu-eiga,Kaip gražiai užbaigti vestuvių vakarą?
+E09-pl,pl,emocija-artumas,2,z-vestuviu-eiga,Jak pięknie zakończyć wieczór weselny?
+E09-ru,ru,emocija-artumas,2,z-vestuviu-eiga,Как красиво завершить свадебный вечер?
+E09-en,en,emocija-artumas,2,z-vestuviu-eiga,How to end a wedding night beautifully?
+E10-lt,lt,emocija-artumas,2,z-artumas,Kokių klausimų paklausti savęs prieš planuojant vestuves?
+E10-pl,pl,emocija-artumas,2,z-artumas,Jakie pytania zadać sobie przed planowaniem wesela?
+E10-ru,ru,emocija-artumas,2,z-artumas,Какие вопросы задать себе перед планированием свадьбы?
+E10-en,en,emocija-artumas,2,z-artumas,What questions to ask yourselves before planning a wedding?
+E11-lt,lt,emocija-artumas,2,vestuves,Kaip vestuvių vedėjas sumažina jaunųjų stresą?
+E11-pl,pl,emocija-artumas,2,vestuves,Jak wodzirej zmniejsza stres pary młodej?
+E11-ru,ru,emocija-artumas,2,vestuves,Как ведущий снижает стресс молодожёнов?
+E11-en,en,emocija-artumas,2,vestuves,How does a wedding host reduce the couple's stress?
+E12-lt,lt,emocija-artumas,2,jubiliejai,Kaip jubiliejuje emociškai sujungti kelias kartas?
+E12-pl,pl,emocija-artumas,2,jubiliejai,Jak na jubileuszu połączyć emocjonalnie kilka pokoleń?
+E12-ru,ru,emocija-artumas,2,jubiliejai,Как на юбилее эмоционально объединить несколько поколений?
+E12-en,en,emocija-artumas,2,jubiliejai,How to connect several generations emotionally at a milestone party?
+E13-lt,lt,emocija-artumas,2,imones,Kaip įmonės renginyje sustiprinti komandos ryšį?
+E13-pl,pl,emocija-artumas,2,imones,Jak na imprezie firmowej wzmocnić więź zespołu?
+E13-ru,ru,emocija-artumas,2,imones,Как на корпоративе укрепить связь в команде?
+E13-en,en,emocija-artumas,2,imones,How to strengthen team bonds at a company event?
+E14-lt,lt,emocija-artumas,2,parodos,Kaip produkto pristatyme sukurti ryšį su auditorija?
+E14-pl,pl,emocija-artumas,2,parodos,Jak na prezentacji produktu nawiązać więź z publicznością?
+E14-ru,ru,emocija-artumas,2,parodos,Как на презентации продукта создать связь с аудиторией?
+E14-en,en,emocija-artumas,2,parodos,How to build a connection with the audience at a product presentation?
+E15-lt,lt,emocija-artumas,2,z-artumas,Kodėl gimtoji kalba šventėje sukuria artumą?
+E15-pl,pl,emocija-artumas,2,z-artumas,Dlaczego język ojczysty na uroczystości buduje bliskość?
+E15-ru,ru,emocija-artumas,2,z-artumas,Почему родной язык на празднике создаёт близость?
+E15-en,en,emocija-artumas,2,z-artumas,Why does a native language create closeness at a celebration?
