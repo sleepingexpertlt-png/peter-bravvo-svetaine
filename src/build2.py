@@ -141,12 +141,29 @@ def press_blk(L, full):
     return f'<section class="blk"><h2>{e(u["press"])}</h2><ul class="press">{"".join(li)}</ul></section>'
 
 
-def gallery(seg):
-    pics = sorted(glob.glob(os.path.join(ROOT, "foto", seg, "*.jpg")) + glob.glob(os.path.join(ROOT, "foto", seg, "*.webp")))
+FOTOJ = json.load(open(os.path.join(ROOT, "foto", "foto.json"))) if os.path.exists(os.path.join(ROOT, "foto", "foto.json")) else {"hero": {}, "gal": {}, "dims": {}}
+ALT = {"lt": "Renginių vedėjas Peter Bravvo", "pl": "Wodzirej Peter Bravvo", "ru": "Ведущий Peter Bravvo", "en": "Event host Peter Bravvo"}
+
+
+def hero_key(p):
+    k = p["key"] if p["kind"] in ("seg", "home") else (p.get("zseg") or "home")
+    return k if k in FOTOJ["hero"] else "home"
+
+
+def gallery(seg, L="lt"):
+    pics = FOTOJ["gal"].get(seg, [])
     if not pics:
         return ""
-    figs = "".join(f'<figure><img src="/foto/{seg}/{os.path.basename(x)}" alt="" loading="lazy" decoding="async"></figure>' for x in pics[:9])
+    figs = "".join(f'<figure><img src="@@FOTO@@g/p{n:02d}.webp" alt="{e(ALT[L])}" loading="lazy" decoding="async" width="800" height="1000"></figure>' for n in pics)
     return f'<section class="blk"><div class="gal">{figs}</div></section>'
+
+
+def hero_foto(p):
+    if not FOTOJ["hero"]:
+        return ""
+    n = FOTOJ["hero"][hero_key(p)]
+    w, h = FOTOJ["dims"].get(str(n), [1200, 1500])
+    return f'<div class="hero-foto" aria-hidden="true"><img src="@@FOTO@@h/p{n:02d}.webp" alt="" width="{w}" height="{h}" fetchpriority="high" decoding="async"></div>'
 
 
 def form_blk(p, preset):
@@ -211,13 +228,13 @@ def main_of(p):
         s = S[k][L]
         get = "".join(f"<li>{e(x)}</li>" for x in s["get"])
         body = (facts(L) + f'<section class="blk"><h2>{e(u["get"])}</h2><ul class="get">{get}</ul></section>'
-                + f'<p class="proof">{e(s["proof"])}</p>' + isiv_blk(k, L) + gallery(k))
+                + f'<p class="proof">{e(s["proof"])}</p>' + isiv_blk(k, L) + gallery(k, L))
         if s["price"] != "none":
             body += prices(L, s["price"]) + steps(L)
         return body + faq_blk(L, s["faq"]) + form_blk(p, k)
     if p["kind"] == "about":
         paras = "".join(f'<p>{e(x)}</p>' for x in ABOUT[L]["paras"])
-        return facts(L) + f'<section class="blk measure prose">{paras}</section>' + style_blk(L) + press_blk(L, True) + form_blk(p, "vestuves")
+        return facts(L) + f'<section class="blk measure prose">{paras}</section>' + gallery("apie", L) + style_blk(L) + press_blk(L, True) + form_blk(p, "vestuves")
     if p["kind"] == "hub":
         cards = "".join(f'<a class="segcard" data-seg="{BYID[f"{L}-{d['key']}"]["seg"]}" href="{LINK(f"{L}-{d['key']}")}"><span class="sc-k">{e(d[L]["h1"])}</span>'
                         f'<span class="sc-t">{e(d[L]["desc"])}</span><span class="sc-go">{e(ZUI[L]["read"])} →</span></a>' for d in ZART)
@@ -273,7 +290,7 @@ def section_html(p):
     links = zl + f'<a href="{LINK(f"{L}-apie")}">{e(u["about"])}</a><a href="{LINK(f"{L}-kontaktai")}">{e(u["contacts"])}</a>'
     return f'''<section class="pg" id="v-{p["id"]}" data-seg="{p["seg"]}" data-lang="{L}" lang="{L}">
 <header class="top"><a class="mark" href="{LINK(f"{L}-home")}">Peter <b>Bravvo</b></a><div class="topr">{links}{langs_nav(p)}</div></header>
-<div class="hero"><canvas class="scene" aria-hidden="true"></canvas><div class="hero-in">
+<div class="hero{" hf" if FOTOJ["hero"] else ""}"><canvas class="scene" aria-hidden="true"></canvas>{hero_foto(p)}<div class="hero-in">
 <p class="roles" aria-hidden="true">{roles}</p>
 <h1{' class="long"' if len(p['h1'])>30 else ''}>{e(p["h1"])}</h1>{sukis_of(p)}<p class="lead">{e(lead_of(p))}</p>{ctas(L, p["id"])}{reviews(L)}</div></div>
 {chooser(p)}
@@ -294,6 +311,7 @@ def graph_for(p):
               "homeLocation": {"@type": "City", "name": "Vilnius"},
               "alumniOf": {"@type": "CollegeOrUniversity", "name": "John Paul II Catholic University of Lublin"},
               "sameAs": SAME,
+              "image": [{"@type": "ImageObject", "url": f"{DOMAIN}/foto/h/p{n:02d}.webp", "caption": ALT[L]} for n in sorted(set(FOTOJ["hero"].values()))],
               "subjectOf": [{"@type": "Article" if x["type"] in ("about", "mention") else "CreativeWork", "name": x["t"], "url": x["url"],
                              "publisher": {"@type": "Organization", "name": x["src"]}} for x in F["press"] if x["type"] in ("about", "mention", "project")],
               "contactPoint": {"@type": "ContactPoint", "contactType": "bookings", "telephone": TEL_RAW, "email": EMAIL, "availableLanguage": F["languages"]},
@@ -411,6 +429,13 @@ h1,h2,h3{text-wrap:balance}
 .scene{position:absolute;inset:0;width:100%;height:100%;z-index:-2}
 .hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 35%,transparent) 0%,color-mix(in srgb,var(--bg) 55%,transparent) 55%,var(--bg) 100%)}
 .hero-in{max-width:1080px;margin:0 auto;padding:0 20px}
+.hero-foto{position:absolute;top:62px;right:0;bottom:0;width:48%;z-index:-1;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 38%);mask-image:linear-gradient(90deg,transparent 0,#000 38%)}
+.hero-foto img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;animation:pbkb 22s ease-in-out infinite alternate;transform-origin:60% 30%}
+@keyframes pbkb{from{transform:scale(1.02)}to{transform:scale(1.12) translate(-1.5%,1%)}}
+.hero.hf::after{background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 70%,transparent) 45%,transparent 75%),linear-gradient(180deg,transparent 60%,var(--bg) 100%)}
+.hero.hf .hero-in>*{max-width:min(100%,620px)}
+.gal figure{margin:0;overflow:hidden;border-radius:10px}.gal img{height:auto;transition:transform .6s ease,filter .6s ease;filter:saturate(.92)}.gal figure:hover img{transform:scale(1.05);filter:saturate(1.05)}
+@media (max-width:860px){.hero-foto{width:100%;bottom:auto;height:72%;-webkit-mask-image:linear-gradient(180deg,#000 30%,transparent 100%);mask-image:linear-gradient(180deg,#000 30%,transparent 100%);opacity:.5}.hero.hf::after{background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 25%,transparent) 0%,color-mix(in srgb,var(--bg) 70%,transparent) 50%,var(--bg) 100%)}}
 .roles{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 18px;font:600 12px/1.2 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .roles span.cur{color:var(--accent)}
 h1{font-family:var(--display);font-weight:var(--dw);letter-spacing:var(--dls);font-size:clamp(38px,7.2vw,84px);line-height:1.02;margin:0 0 20px;max-width:15ch}
@@ -504,7 +529,7 @@ main{padding-top:8px}
 /* forma: etiketė virš lauko, poromis */
 @media (max-width:820px){.facts{grid-template-columns:repeat(2,1fr)}.facts div:last-child{grid-column:1/-1}.steps{grid-template-columns:repeat(2,1fr)}.prices{grid-template-columns:1fr}.press{columns:1}}
 @media (max-width:560px){body{font-size:16px}.get{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.ask{grid-template-columns:1fr}.gal{grid-template-columns:repeat(2,1fr)}.hero{padding:100px 0 40px}.topr>a{display:none}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.hero-foto img{animation:none}}
 @view-transition{navigation:auto}
 """
 
@@ -600,7 +625,7 @@ def to_static(s, path="/"):
     def f(m):
         t = BYID[m.group(1)]["path"].lstrip("/")
         return (pre + t) if t else pre
-    s = re.sub(LINKRE, f, s)
+    s = re.sub(LINKRE, f, s).replace("@@FOTO@@", pre + "foto/")
     return s.replace('href="/peter-bravvo.vcf"', f'href="{pre}peter-bravvo.vcf"')
 
 
@@ -639,7 +664,7 @@ def render_static(p):
     body = to_static(sec, p["path"])
     return f'''<!DOCTYPE html><html lang="{p["lang"]}" data-seg="{p["seg"]}"><head>{head_common()}
 <title>{e(p["title"])}</title><meta name="description" content="{e(p["desc"])}"><link rel="canonical" href="{url}">{alternates(p)}
-<meta property="og:type" content="{"article" if p["kind"] == "art" else "profile"}"><meta property="og:title" content="{e(p["title"])}"><meta property="og:description" content="{e(p["desc"])}"><meta property="og:url" content="{url}"><meta property="og:locale" content="{og_loc}">
+<meta property="og:type" content="{"article" if p["kind"] == "art" else "profile"}"><meta property="og:title" content="{e(p["title"])}"><meta property="og:description" content="{e(p["desc"])}"><meta property="og:url" content="{url}"><meta property="og:locale" content="{og_loc}"><meta property="og:image" content="{DOMAIN}/foto/og/{hero_key(p)}.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{json.dumps(graph_for(p), ensure_ascii=False)}</script>
 <style>{CSS}</style></head><body>
 <a class="skip" href="#f-{p["id"]}" style="position:absolute;left:-9999px">{e(UI[p["lang"]]["skip"])}</a>
