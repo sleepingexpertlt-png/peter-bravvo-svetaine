@@ -4,27 +4,30 @@ on:
     branches: [main]
     paths: ["site/**"]
   workflow_dispatch:
+concurrency:
+  group: hostinger-ftp
+  cancel-in-progress: false
 jobs:
   ikelti:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Ar yra FTP prisijungimas
-        id: chk
+      - name: Įkelti site/ į public_html (lftp, su pakartojimais)
         env:
-          S: ${{ secrets.FTP_SERVER }}
-        run: if [ -n "$S" ]; then echo "ok=1" >> "$GITHUB_OUTPUT"; else echo "FTP sekretų nėra – praleidžiu"; fi
-      - name: Įkelti site/ į public_html
-        if: steps.chk.outputs.ok == '1'
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./site/
-          server-dir: ${{ vars.FTP_DIR || 'public_html/' }}
-          exclude: |
-            **/.git*
-            **/.git*/**
-            CNAME
-            .nojekyll
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_DIR: ${{ vars.FTP_DIR || 'public_html' }}
+        run: |
+          if [ -z "$FTP_SERVER" ]; then echo "FTP sekretų nėra – praleidžiu"; exit 0; fi
+          sudo apt-get install -y -qq lftp >/dev/null
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" -e "
+            set ftp:ssl-allow no;
+            set net:timeout 30;
+            set net:max-retries 8;
+            set net:reconnect-interval-base 5;
+            set net:reconnect-interval-max 30;
+            set ftp:passive-mode yes;
+            mirror -R --parallel=2 --no-perms --exclude-glob CNAME --exclude-glob .nojekyll site/ $FTP_DIR/;
+            bye"
+          echo "Įkelta: $(find site -type f | wc -l) failų"
