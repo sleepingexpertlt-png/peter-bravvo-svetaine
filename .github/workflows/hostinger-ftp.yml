@@ -34,5 +34,8 @@ jobs:
             bye"
           echo "Įkelta: $(find site -type f | wc -l) failų"
           echo "--- serveryje foto/h:"; lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" -e "set ftp:ssl-allow no; cls -l $FTP_DIR/foto/h/; cls -l $FTP_DIR/index.html; bye" || true
-          echo "--- gyvai:"; curl -s https://peterbravvo.lt/ | grep -o 'hero-foto[^>]*><img src="[^"]*"' | head -1 || true
-          curl -s -o /dev/null -w "foto %{http_code} %{content_type} %{size_download}\n" https://peterbravvo.lt/foto/h/p19.webp || true
+          echo "--- gyvai:"; R=$RANDOM
+          curl -sI "https://peterbravvo.lt/?v=$R" | grep -iE "^HTTP|last-modified|hcdn-cache" || true
+          curl -s "https://peterbravvo.lt/?v=$R" | grep -o 'hero-foto[^>]*><img src="[^"]*"' | head -1 || true
+          curl -s -o /dev/null -w "foto(nocache) %{http_code} %{content_type} %{size_download}\n" "https://peterbravvo.lt/foto/h/p19.webp?v=$R" || true
+          curl -s -o /dev/null -w "foto %{http_code}\n" https://peterbravvo.lt/foto/h/p19.webp || true
