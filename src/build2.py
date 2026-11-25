@@ -5,7 +5,8 @@ Nuotraukos: įdėkite JPG/WEBP į foto/<segmentas>/ (vestuves, imones, ...) ir p
 """
 import datetime, glob, html, json, os, re, shutil, urllib.parse
 BUILD_DATE = datetime.date.today().isoformat()
-from turinys import LANGS, SEGS, SLUG, UI, S, HOME, ABOUT, CONTACT
+from turinys import LANGS, SEGS, SLUG, UI, S, HOME, ABOUT, CONTACT, TEMA, POZ
+TH = lambda sg: TEMA.get(sg, sg)
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 F = json.load(open(os.path.join(ROOT, "faktai.json"), encoding="utf-8"))
@@ -25,7 +26,7 @@ PAGES = []
 for L in LANGS:
     PAGES.append(dict(id=f"{L}-home", lang=L, key="home", kind="home", seg="visi"))
     for sg in SEGS:
-        PAGES.append(dict(id=f"{L}-{sg}", lang=L, key=sg, kind="seg", seg=sg))
+        PAGES.append(dict(id=f"{L}-{sg}", lang=L, key=sg, kind="seg", seg=TH(sg)))
     PAGES.append(dict(id=f"{L}-apie", lang=L, key="apie", kind="about", seg="visi"))
     PAGES.append(dict(id=f"{L}-kontaktai", lang=L, key="kontaktai", kind="contact", seg="visi"))
 for p in PAGES:
@@ -92,7 +93,7 @@ def chooser(p):
     lis = []
     for key, seg, label in items:
         cur = ' aria-current="page"' if p["key"] == key else ""
-        lis.append(f'<li><a class="chip" href="{LINK(f"{L}-{key}")}"{cur}><i data-seg="{seg}"></i>{e(label)}</a></li>')
+        lis.append(f'<li><a class="chip" href="{LINK(f"{L}-{key}")}"{cur}><i data-seg="{TH(seg)}"></i>{e(label)}</a></li>')
     return f'<nav class="chooser" aria-label="{e(u["menu"])}"><p class="ch-q">{e(u["chooser"])}</p><ul>{"".join(lis)}</ul></nav>'
 
 
@@ -169,16 +170,37 @@ def segcards(L):
     out = []
     for sg in SEGS:
         s = S[sg][L]
-        out.append(f'<a class="segcard" data-seg="{sg}" href="{LINK(f"{L}-{sg}")}"><span class="sc-k">{e(s["chip"])}</span>'
+        out.append(f'<a class="segcard" data-seg="{TH(sg)}" href="{LINK(f"{L}-{sg}")}"><span class="sc-k">{e(s["chip"])}</span>'
                    f'<span class="sc-t">{e(s["lead"].split(". ")[0].rstrip("."))}.</span><span class="sc-go">→</span></a>')
     return f'<section class="blk"><div class="segcards">{"".join(out)}</div></section>'
 
 
 # ---------- puslapio kūnas ----------
+def poz_blk(L):
+    z = POZ[L]
+    return (f'<section class="blk style"><h2>{e(z["h"])}</h2><ul class="trio">' + "".join(f"<li>{e(x)}</li>" for x in z["items"])
+            + f'</ul><p class="measure">{e(z["p"])}</p></section>')
+
+
+# Viešų renginių, kuriuos vedė Peter Bravvo, sąrašas (iš žiniasklaidos; datos tik tiek, kiek žinoma)
+EVENTS = [
+    dict(name="Joninės Rudaminoje 2024", start="2024-06", place="Rudamina, Vilniaus rajonas", url="https://vrsa.lt/titulinio-naujienos/424/jonines-rudaminoje-koncertas-dj-jovani-ispudingas-lazeriu-sou-ir-sokiai-iki-ryto:4884"),
+    dict(name="Kalėdų eglės įžiebimas Nemenčinėje 2019", start="2019", place="Nemenčinė, Vilniaus rajonas", url="https://vilnijosnaujienos.lt/zaliaskare-nusvito-ir-nemencineje/"),
+    dict(name="Miss Polka Litwy 2019", start="2019", place="Lietuva", url="https://kurierwilenski.lt/2019/02/18/dominika-lamauskaite-dziewczyna-kuriera-wilenskiego-miss-polka-litwy-2019/"),
+]
+
+
+def events_graph():
+    return [{"@type": "Event", "@id": DOMAIN + "/#event-" + str(i), "name": ev["name"], "startDate": ev["start"],
+             "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+             "location": {"@type": "Place", "name": ev["place"], "address": {"@type": "PostalAddress", "addressLocality": ev["place"].split(",")[0], "addressCountry": "LT"}},
+             "performer": {"@id": PID}, "url": ev["url"]} for i, ev in enumerate(EVENTS, 1)]
+
+
 def main_of(p):
     L, k, u = p["lang"], p["key"], UI[p["lang"]]
     if p["kind"] == "home":
-        return facts(L) + segcards(L) + style_blk(L) + prices(L, "even") + steps(L) + press_blk(L, False) + form_blk(p, "vestuves")
+        return facts(L) + poz_blk(L) + segcards(L) + style_blk(L) + prices(L, "even") + steps(L) + press_blk(L, False) + form_blk(p, "vestuves")
     if p["kind"] == "seg":
         s = S[k][L]
         get = "".join(f"<li>{e(x)}</li>" for x in s["get"])
@@ -261,7 +283,12 @@ def graph_for(p):
               "sameAs": SAME,
               "subjectOf": [{"@type": "Article" if x["type"] in ("about", "mention") else "CreativeWork", "name": x["t"], "url": x["url"],
                              "publisher": {"@type": "Organization", "name": x["src"]}} for x in F["press"] if x["type"] in ("about", "mention", "project")],
-              "contactPoint": {"@type": "ContactPoint", "contactType": "bookings", "telephone": TEL_RAW, "email": EMAIL, "availableLanguage": F["languages"]}}
+              "contactPoint": {"@type": "ContactPoint", "contactType": "bookings", "telephone": TEL_RAW, "email": EMAIL, "availableLanguage": F["languages"]},
+              "description": POZ[L]["h"] + ". " + POZ[L]["p"],
+              "knowsAbout": POZ[L]["items"] + [S[sg][L]["chip"] for sg in SEGS],
+              "hasOccupation": [{"@type": "Occupation", "name": n, "occupationLocation": {"@type": "City", "name": "Vilnius"}}
+                                for n in (JOB[L], S["parodos"][L]["h1"], "TV presenter", "Voice-over artist")],
+              "performerIn": [{"@id": DOMAIN + "/#event-" + str(i)} for i in range(1, len(EVENTS) + 1)]}
     offers = [{"@type": "Offer", "priceCurrency": "EUR",
                "priceSpecification": {"@type": "PriceSpecification", "minPrice": P_EVE, "priceCurrency": "EUR"},
                "itemOffered": {"@type": "Service", "name": UI[L]["p_even"] + " – " + UI[L]["p_even_d"]}},
@@ -272,6 +299,9 @@ def graph_for(p):
                "telephone": TEL_RAW, "email": EMAIL, "priceRange": f"{P_HOUR}–{P_EVE}+ €", "currenciesAccepted": "EUR",
                "areaServed": [{"@type": "City", "name": "Vilnius"}, {"@type": "Country", "name": "Lithuania"}],
                "knowsLanguage": F["languages"], "sameAs": SAME + [GBP],
+               "slogan": POZ[L]["h"], "alternateName": POZ[L]["items"], "description": POZ[L]["p"],
+               "audience": [{"@type": "PeopleAudience", "audienceType": S[sg][L]["chip"]} for sg in SEGS if sg not in ("parodos", "imones")]
+                           + [{"@type": "BusinessAudience", "audienceType": S["parodos"][L]["chip"]}, {"@type": "BusinessAudience", "audienceType": S["imones"][L]["chip"]}],
                "hasOfferCatalog": {"@type": "OfferCatalog", "name": UI[L]["prices"], "itemListElement": offers}}
     website = {"@type": "WebSite", "@id": WID, "url": DOMAIN + "/", "name": F["brand"], "publisher": {"@id": PID}, "inLanguage": LANGS}
     ptype = {"home": "ProfilePage", "about": "AboutPage", "contact": "ContactPage", "hub": "CollectionPage"}.get(p["kind"], "WebPage")
@@ -285,6 +315,11 @@ def graph_for(p):
         s = S[p["key"]][L]
         sv = {"@type": "Service", "@id": url + "#service", "name": s["h1"], "serviceType": s["chip"], "description": s["desc"],
               "provider": {"@id": PID}, "areaServed": {"@type": "Country", "name": "Lithuania"}, "availableLanguage": F["languages"], "url": url}
+        if p["key"] == "vestuves":
+            sv["alternateName"] = POZ[L]["items"][:4]
+        if p["key"] in ("parodos", "imones"):
+            sv["audience"] = {"@type": "BusinessAudience", "audienceType": POZ[L]["items"][4]}
+            sv["alternateName"] = POZ[L]["items"][4:]
         if s["price"] == "even":
             sv["offers"] = {"@type": "Offer", "priceCurrency": "EUR", "priceSpecification": {"@type": "PriceSpecification", "minPrice": P_EVE, "priceCurrency": "EUR"}}
         elif s["price"] == "hour":
@@ -305,6 +340,8 @@ def graph_for(p):
     if faq:
         g.append({"@type": "FAQPage", "@id": url + "#faq", "inLanguage": L,
                   "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
+    if p["kind"] in ("home", "about") or p["key"] in ("miestas", "parodos"):
+        g += events_graph()
     if p["kind"] != "home":
         home = BYID[f"{L}-home"]
         items = [{"@type": "ListItem", "position": 1, "name": F["brand"], "item": DOMAIN + home["path"]}]
@@ -553,8 +590,19 @@ def to_hash(s):
     return re.sub(LINKRE, lambda m: "#" + m.group(1), s)
 
 
+VERIF = {}
+_vf = os.path.join(ROOT, "patvirtinimai.txt")  # eilutės: google=XXXX / bing=YYYY
+if os.path.exists(_vf):
+    for ln in open(_vf, encoding="utf-8"):
+        if "=" in ln:
+            k, v = ln.strip().split("=", 1); VERIF[k.strip()] = v.strip()
+
+
 def head_common():
-    return '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' + FONTS
+    v = ""
+    if VERIF.get("google"): v += f'<meta name="google-site-verification" content="{e(VERIF["google"])}">'
+    if VERIF.get("bing"): v += f'<meta name="msvalidate.01" content="{e(VERIF["bing"])}">'
+    return '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' + v + FONTS
 
 
 def alternates(p):
@@ -631,6 +679,7 @@ def llms():
     L = "lt"
     lines = [f"# {F['brand']}", "",
              f"> {F['brand']} (Piotr Andrzejewski / Piotras Andžejevskis) – renginių vedėjas iš Vilniaus. Veda lietuvių, lenkų, rusų ir anglų kalbomis. 400+ renginių, 150+ vestuvių (nuo 2013 m.). 2021–2023 m. laidos „Co się dzieje“ vedėjas TVP Wilno. Nuo 2021 m. balso aktorius Rygos studijoje Digi Media (TV anonsai, įskaitant Nickelodeon kanalą).",
+             "", "Pozicionavimas: " + " · ".join(POZ["lt"]["items"]) + ".",
              "", f"Kontaktai: {TEL}, {EMAIL}. Kainos: vakaro programa nuo {P_EVE} €, konferansas {P_HOUR} €/val., avansas {DEP} €.", "", "## Puslapiai"]
     for p in PAGES:
         lines.append(f"- [{p['title']}]({DOMAIN}{p['path']}): {p['desc']}")

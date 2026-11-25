@@ -4,25 +4,27 @@
 # Taisyklė: jokių faktų, kurių nėra atsakymuose. Nickelodeon – tik kaip kanalas (N2/N3), be logotipų.
 
 LANGS = ["lt", "pl", "ru", "en"]
-SEGS = ["vestuves", "imones", "jubiliejai", "seimos", "jaunimas", "miestas", "balsas"]
+SEGS = ["vestuves", "imones", "parodos", "jubiliejai", "seimos", "jaunimas", "miestas", "balsas"]
+# segmento spalvų tema (parodos naudoja įmonių temą)
+TEMA = {"parodos": "imones"}
 
 SLUG = {
     "lt": {"home": "/", "vestuves": "/vestuviu-vedejas/", "imones": "/imoniu-renginiu-vedejas/",
            "jubiliejai": "/jubiliejaus-vedejas/", "seimos": "/krikstynu-vedejas/",
            "jaunimas": "/isleistuviu-vedejas/", "miestas": "/koncertu-svenciu-vedejas/",
-           "balsas": "/diktorius/", "apie": "/apie/", "kontaktai": "/kontaktai/"},
+           "balsas": "/diktorius/", "parodos": "/parodu-pristatymu-vedejas/", "apie": "/apie/", "kontaktai": "/kontaktai/"},
     "pl": {"home": "/pl/", "vestuves": "/pl/wodzirej-wesele/", "imones": "/pl/prowadzacy-imprezy-firmowe/",
            "jubiliejai": "/pl/prowadzacy-jubileusze-urodziny/", "seimos": "/pl/prowadzacy-chrzciny-komunie/",
            "jaunimas": "/pl/prowadzacy-studniowki-bale/", "miestas": "/pl/konferansjer-koncerty-festyny/",
-           "balsas": "/pl/lektor/", "apie": "/pl/o-mnie/", "kontaktai": "/pl/kontakt/"},
+           "balsas": "/pl/lektor/", "parodos": "/pl/prowadzacy-targi-prezentacje/", "apie": "/pl/o-mnie/", "kontaktai": "/pl/kontakt/"},
     "ru": {"home": "/ru/", "vestuves": "/ru/vedushchij-na-svadbu/", "imones": "/ru/vedushchij-korporativov/",
            "jubiliejai": "/ru/vedushchij-na-yubilej/", "seimos": "/ru/vedushchij-krestiny/",
            "jaunimas": "/ru/vedushchij-vypusknoj/", "miestas": "/ru/vedushchij-koncertov/",
-           "balsas": "/ru/diktor/", "apie": "/ru/obo-mne/", "kontaktai": "/ru/kontakty/"},
+           "balsas": "/ru/diktor/", "parodos": "/ru/vedushchij-vystavok-prezentacij/", "apie": "/ru/obo-mne/", "kontaktai": "/ru/kontakty/"},
     "en": {"home": "/en/", "vestuves": "/en/wedding-host/", "imones": "/en/corporate-event-host/",
            "jubiliejai": "/en/birthday-anniversary-host/", "seimos": "/en/christening-communion-host/",
            "jaunimas": "/en/prom-graduation-host/", "miestas": "/en/concert-festival-host/",
-           "balsas": "/en/voice-over/", "apie": "/en/about/", "kontaktai": "/en/contact/"},
+           "balsas": "/en/voice-over/", "parodos": "/en/trade-fair-presentation-host/", "apie": "/en/about/", "kontaktai": "/en/contact/"},
 }
 
 # Bendri užrašai
@@ -443,6 +445,65 @@ S["balsas"] = {
     faq=[("Which languages do you voice?", "Lithuanian, Polish and Russian."),
          ("How fast?", "A short ad usually takes a couple of days."),
          ("How much?", "It depends on length and usage. Send the script and I'll reply with a price.")], price="none"),
+}
+
+S["parodos"] = {
+ "lt": dict(chip="Parodos ir pristatymai", h1="Vedėjas tarptautinėms parodoms ir pristatymams", title="Vedėjas parodoms, pristatymams ir renginių agentūroms – Peter Bravvo",
+    desc="Daugiakalbis vedėjas tarptautinėms parodoms, produktų pristatymams, konferencijoms ir apdovanojimams. Partneris renginių agentūroms: LT, PL, RU, EN.",
+    lead="Tarptautinė paroda, produkto pristatymas, konferencija ar apdovanojimai: kai salėje kelios kalbos, vedėjas turi jas sujungti. Buvęs TVP Wilno laidos vedėjas, lietuvių, lenkų ir rusų kalbomis laisvai, angliškai – oficialiai daliai.",
+    get=["Parodų scena ir stendų programa: pranešėjų pristatymai, laiko kontrolė, aiškus tempas.",
+         "Produktų ir prekių ženklų pristatymai keliomis kalbomis viename renginyje.",
+         "Renginių agentūroms – patikimas partneris: dirbu pagal jūsų scenarijų, derinu su technine komanda, sutartis ir sąskaita.",
+         "Konferencijos, forumai ir apdovanojimai – konferansas 200 € už valandą."],
+    proof="Laida „Co się dzieje“ TVP Wilno 2021–2023, koncertų konferansas Compensa salėje, didelės miesto šventės ir darbas scenoje su žinomais atlikėjais.",
+    faq=[("Ar dirbate su renginių agentūromis?", "Taip. Dirbu pagal agentūros scenarijų ir laiko planą, derinu su technine komanda, pasirašome sutartį ir išrašau sąskaitą."),
+         ("Kokiomis kalbomis vedate parodas ir pristatymus?", "Lietuvių, lenkų ir rusų kalbomis laisvai, anglų kalba – oficialioms dalims ir pranešimams."),
+         ("Kaip skaičiuojama kaina?", "Konferansas – 200 €/val. Visos dienos ar kelių dienų parodai pateikiu pasiūlymą.")], price="hour"),
+ "pl": dict(chip="Targi i prezentacje", h1="Prowadzący targi międzynarodowe i prezentacje", title="Prowadzący targi, prezentacje i partner agencji eventowych – Peter Bravvo",
+    desc="Wielojęzyczny prowadzący targi międzynarodowe, prezentacje produktów, konferencje i gale. Partner agencji eventowych: PL, LT, RU, EN.",
+    lead="Targi międzynarodowe, prezentacja produktu, konferencja albo gala: gdy na sali jest kilka języków, prowadzący musi je połączyć. Były prowadzący TVP Wilno, swobodnie po polsku, litewsku i rosyjsku, po angielsku – części oficjalne.",
+    get=["Scena targowa i program stoiska: zapowiedzi prelegentów, pilnowanie czasu, jasne tempo.",
+         "Prezentacje produktów i marek w kilku językach na jednym wydarzeniu.",
+         "Dla agencji eventowych – pewny partner: pracuję według Waszego scenariusza, współpracuję z ekipą techniczną, umowa i rachunek.",
+         "Konferencje, fora i gale – konferansjerka 200 € za godzinę."],
+    proof="Program „Co się dzieje” w TVP Wilno 2021–2023, konferansjerka koncertów w sali Compensa, duże imprezy miejskie i praca na scenie ze znanymi artystami.",
+    faq=[("Czy współpracujesz z agencjami eventowymi?", "Tak. Pracuję według scenariusza i harmonogramu agencji, współpracuję z ekipą techniczną, podpisujemy umowę i wystawiam rachunek."),
+         ("W jakich językach prowadzisz targi i prezentacje?", "Swobodnie po polsku, litewsku i rosyjsku, po angielsku – części oficjalne i komunikaty."),
+         ("Jak liczona jest cena?", "Konferansjerka – 200 €/godz. Na cały dzień lub kilkudniowe targi przygotowuję ofertę.")], price="hour"),
+ "ru": dict(chip="Выставки и презентации", h1="Ведущий международных выставок и презентаций", title="Ведущий выставок, презентаций и партнёр event-агентств – Peter Bravvo",
+    desc="Многоязычный ведущий международных выставок, презентаций продуктов, конференций и церемоний награждения. Партнёр event-агентств: RU, LT, PL, EN.",
+    lead="Международная выставка, презентация продукта, конференция или награждение: когда в зале несколько языков, ведущий должен их объединить. Бывший ведущий TVP Wilno, свободно по-русски, по-литовски и по-польски, по-английски – официальные части.",
+    get=["Сцена выставки и программа стенда: представление спикеров, контроль времени, понятный темп.",
+         "Презентации продуктов и брендов на нескольких языках в одном мероприятии.",
+         "Для event-агентств – надёжный партнёр: работаю по вашему сценарию, согласую с технической командой, договор и счёт.",
+         "Конференции, форумы и награждения – конферанс 200 € в час."],
+    proof="Программа «Co się dzieje» на TVP Wilno 2021–2023, конферанс концертов в зале Compensa, большие городские праздники и работа на сцене с известными артистами.",
+    faq=[("Работаете с event-агентствами?", "Да. Работаю по сценарию и таймингу агентства, согласую с технической командой, подписываем договор и выставляю счёт."),
+         ("На каких языках ведёте выставки и презентации?", "Свободно на русском, литовском и польском, на английском – официальные части и объявления."),
+         ("Как считается цена?", "Конферанс – 200 €/час. На целый день или многодневную выставку готовлю предложение.")], price="hour"),
+ "en": dict(chip="Trade fairs & presentations", h1="Host for international trade fairs and presentations", title="Trade fair, presentation and event agency host – Peter Bravvo",
+    desc="Multilingual host for international trade fairs, product launches, conferences and award nights. A partner for event agencies: EN, LT, PL, RU.",
+    lead="An international trade fair, a product launch, a conference or an award night: when the room speaks several languages, the host has to bring them together. A former TVP Wilno TV host, fluent in Lithuanian, Polish and Russian, with English for the formal part.",
+    get=["Trade fair stage and stand programme: introducing speakers, keeping time, a clear pace.",
+         "Product and brand presentations in several languages at one event.",
+         "For event agencies, a reliable partner: I work to your script, coordinate with the technical crew, and sign a contract and invoice.",
+         "Conferences, forums and award nights, with compering at 200 € per hour."],
+    proof="The TVP Wilno show “Co się dzieje” 2021–2023, compering concerts at the Compensa hall, large city celebrations and stage work with well-known artists.",
+    faq=[("Do you work with event agencies?", "Yes. I work to the agency's script and timing, coordinate with the technical crew, and we sign a contract and I invoice."),
+         ("Which languages do you host fairs and presentations in?", "Fluent Lithuanian, Polish and Russian; English for formal parts and announcements."),
+         ("How is the price set?", "Compering is 200 €/hour. For a full day or a multi-day fair I send an offer.")], price="hour"),
+}
+
+# Pozicionavimas: emocinės nišos ir B2B (matoma pagrindiniame puslapyje + schema)
+POZ = {
+ "lt": dict(h="Vedėjas jūsų gyvenimo šventėms", items=["Svajonių vestuvių vedėjas", "Meilės ir laimės akimirkų vedėjas", "Smagiausių gyvenimo akimirkų vedėjas", "Vedėjas, kuris tampa draugu", "Partneris renginių agentūroms", "Vedėjas tarptautinėms parodoms ir pristatymams"],
+            p="Šventė vyksta kartą, o prisimenama visą gyvenimą. Vedu taip, kad svečiai jaustųsi kaip tarp draugų, o jūs – ramiai: kiekvienas momentas suplanuotas kartu su jumis."),
+ "pl": dict(h="Wodzirej na najważniejsze chwile życia", items=["Wodzirej wesela marzeń", "Prowadzący chwile miłości i szczęścia", "Wodzirej najpiękniejszych chwil życia", "Wodzirej, który staje się przyjacielem", "Partner agencji eventowych", "Prowadzący targi międzynarodowe i prezentacje"],
+            p="Uroczystość jest raz, a wspomina się ją całe życie. Prowadzę tak, żeby goście czuli się jak wśród przyjaciół, a Wy – spokojnie: każdy moment planujemy razem."),
+ "ru": dict(h="Ведущий для праздников вашей жизни", items=["Ведущий свадьбы мечты", "Ведущий моментов любви и счастья", "Ведущий самых ярких моментов жизни", "Ведущий, который становится другом", "Партнёр event-агентств", "Ведущий международных выставок и презентаций"],
+            p="Праздник бывает один раз, а вспоминается всю жизнь. Я веду так, чтобы гости чувствовали себя среди друзей, а вы – спокойно: каждый момент мы планируем вместе."),
+ "en": dict(h="A host for the celebrations of your life", items=["Your dream wedding host", "Host of love and happy moments", "Host of life's most joyful moments", "A host who becomes a friend", "Partner for event agencies", "Host for international trade fairs and presentations"],
+            p="A celebration happens once and is remembered for a lifetime. I host so your guests feel among friends and you feel calm: we plan every moment together."),
 }
 
 HOME = {
