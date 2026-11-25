@@ -506,6 +506,19 @@ POZ = {
             p="A celebration happens once and is remembered for a lifetime. I host so your guests feel among friends and you feel calm: we plan every moment together."),
 }
 
+# Šūkiai (psichologija: artumas / afiliacija, bendrakūra, saugumas, viršūnės taisyklė). Rodomi po H1 ir Service.slogan.
+SUKIS = {
+ "home": {"lt": "Kalbu jūsų kalba – ir jūsų svečių kalba.", "pl": "Mówię Waszym językiem – i językiem Waszych gości.", "ru": "Говорю на вашем языке – и на языке ваших гостей.", "en": "I speak your language, and your guests' language too."},
+ "vestuves": {"lt": "Jūsų meilės istorija – mano scenarijus.", "pl": "Wasza historia miłości – mój scenariusz.", "ru": "Ваша история любви – мой сценарий.", "en": "Your love story is my script."},
+ "imones": {"lt": "Komanda, kuri juokiasi kartu, dirba kartu.", "pl": "Zespół, który śmieje się razem, pracuje razem.", "ru": "Команда, которая смеётся вместе, работает вместе.", "en": "A team that laughs together works together."},
+ "parodos": {"lt": "Jūsų produktas – scenoje, kuri kalba jūsų klientų kalba.", "pl": "Wasz produkt na scenie, która mówi językiem Waszych klientów.", "ru": "Ваш продукт – на сцене, которая говорит на языке ваших клиентов.", "en": "Your product on a stage that speaks your clients' language."},
+ "jubiliejai": {"lt": "Jūsų metai – viena šventė, kurioje susitinka visi.", "pl": "Wasze lata – jedno święto, na którym spotykają się wszyscy.", "ru": "Ваши годы – один праздник, где встречаются все.", "en": "Your years, one celebration where everyone meets."},
+ "seimos": {"lt": "Mažiausias svečias – didžiausia šventė.", "pl": "Najmniejszy gość – największe święto.", "ru": "Самый маленький гость – самый большой праздник.", "en": "The smallest guest, the biggest celebration."},
+ "jaunimas": {"lt": "Vakaras, kurį prisiminsite susitikime po 10 metų.", "pl": "Wieczór, który wspomnicie na zjeździe po 10 latach.", "ru": "Вечер, который вспомните на встрече через 10 лет.", "en": "A night you'll still talk about at your 10-year reunion."},
+ "miestas": {"lt": "Aikštė pilna žmonių – ir visi jaučiasi kaip namie.", "pl": "Plac pełen ludzi – i każdy czuje się jak w domu.", "ru": "Площадь полна людей – и каждый как дома.", "en": "A square full of people, and everyone feels at home."},
+ "balsas": {"lt": "Balsas, kurį jau girdėjote – dabar jūsų žinutei.", "pl": "Głos, który już znacie – teraz dla Waszego przekazu.", "ru": "Голос, который вы уже слышали, – теперь для вашего сообщения.", "en": "A voice you've already heard, now for your message."},
+}
+
 HOME = {
  "lt": dict(h1="Renginių vedėjas Peter Bravvo", title="Renginių vedėjas Peter Bravvo – vestuvės, įmonių ir šeimos šventės (LT, PL, RU, EN)",
     desc="Renginių vedėjas Peter Bravvo iš Vilniaus: 400+ renginių, 150+ vestuvių, buvęs TVP Wilno laidos vedėjas. Vedu lietuvių, lenkų, rusų ir anglų kalbomis.",

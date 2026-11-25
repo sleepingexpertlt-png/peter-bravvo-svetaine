@@ -5,7 +5,7 @@ Nuotraukos: įdėkite JPG/WEBP į foto/<segmentas>/ (vestuves, imones, ...) ir p
 """
 import datetime, glob, html, json, os, re, shutil, urllib.parse
 BUILD_DATE = datetime.date.today().isoformat()
-from turinys import LANGS, SEGS, SLUG, UI, S, HOME, ABOUT, CONTACT, TEMA, POZ
+from turinys import LANGS, SEGS, SLUG, UI, S, HOME, ABOUT, CONTACT, TEMA, POZ, SUKIS
 TH = lambda sg: TEMA.get(sg, sg)
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -235,6 +235,13 @@ def main_of(p):
             + form_blk(p, "vestuves") + faq_blk(L, c["faq"]) + prices(L, "even"))
 
 
+def sukis_of(p):
+    k = p["key"] if p["kind"] in ("seg", "home") else None
+    if p["kind"] == "art" and p.get("zseg") in SUKIS: k = p["zseg"]
+    t = SUKIS.get(k, {}).get(p["lang"]) if k else None
+    return f'<p class="sukis">{e(t)}</p>' if t else ""
+
+
 def lead_of(p):
     L, k = p["lang"], p["key"]
     if k == "home": return HOME[L]["lead"]
@@ -262,7 +269,7 @@ def section_html(p):
 <header class="top"><a class="mark" href="{LINK(f"{L}-home")}">Peter <b>Bravvo</b></a><div class="topr">{links}{langs_nav(p)}</div></header>
 <div class="hero"><canvas class="scene" aria-hidden="true"></canvas><div class="hero-in">
 <p class="roles" aria-hidden="true">{roles}</p>
-<h1{' class="long"' if len(p['h1'])>30 else ''}>{e(p["h1"])}</h1><p class="lead">{e(lead_of(p))}</p>{ctas(L, p["id"])}{reviews(L)}</div></div>
+<h1{' class="long"' if len(p['h1'])>30 else ''}>{e(p["h1"])}</h1>{sukis_of(p)}<p class="lead">{e(lead_of(p))}</p>{ctas(L, p["id"])}{reviews(L)}</div></div>
 {chooser(p)}
 <main class="wrap">{main_of(p)}</main>
 <footer class="foot wrap"><p><b>{e(F["brand"])}</b> · {e(u["foot"])}</p><p><a href="tel:{TEL_RAW}">{e(TEL)}</a> · <a href="mailto:{EMAIL}">{e(EMAIL)}</a> · <a href="{F["profiles"]["instagram"]}" rel="noopener">Instagram</a> · <a href="{F["profiles"]["facebook"]}" rel="noopener">Facebook</a> · <a href="{F["profiles"]["youtube"]}" rel="noopener">YouTube</a> · <a href="{GBP}" rel="noopener">Google</a></p></footer>
@@ -315,6 +322,8 @@ def graph_for(p):
         s = S[p["key"]][L]
         sv = {"@type": "Service", "@id": url + "#service", "name": s["h1"], "serviceType": s["chip"], "description": s["desc"],
               "provider": {"@id": PID}, "areaServed": {"@type": "Country", "name": "Lithuania"}, "availableLanguage": F["languages"], "url": url}
+        if SUKIS.get(p["key"], {}).get(L):
+            sv["slogan"] = SUKIS[p["key"]][L]
         if p["key"] == "vestuves":
             sv["alternateName"] = POZ[L]["items"][:4]
         if p["key"] in ("parodos", "imones"):
@@ -400,6 +409,7 @@ h1,h2,h3{text-wrap:balance}
 .roles span.cur{color:var(--accent)}
 h1{font-family:var(--display);font-weight:var(--dw);letter-spacing:var(--dls);font-size:clamp(38px,7.2vw,84px);line-height:1.02;margin:0 0 20px;max-width:15ch}
 [data-seg="vestuves"] h1,[data-seg="jubiliejai"] h1{font-size:clamp(46px,8.4vw,100px);font-style:italic;line-height:.98}
+.sukis{font-family:var(--display);font-style:italic;font-size:clamp(20px,2.6vw,28px);line-height:1.3;color:var(--accent);margin:-6px 0 18px;max-width:34ch}
 .lead{font-size:clamp(18px,2.1vw,21px);max-width:58ch;margin:0 0 26px;color:var(--ink)}
 .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
 .btn{display:inline-flex;align-items:center;gap:8px;font:700 15px/1 var(--body);padding:14px 20px;border-radius:99px;border:1.5px solid var(--accent);color:var(--ink);text-decoration:none;background:transparent;cursor:pointer;transition:transform .15s,background .2s}
