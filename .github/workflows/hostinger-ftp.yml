@@ -12,12 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Įkelti site/ į public_html (lftp, su pakartojimais)
+      - name: Įkelti site/ į svetainės šaknį (lftp, su pakartojimais)
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_DIR: ${{ vars.FTP_DIR || 'public_html' }}
+          FTP_DIR: ${{ vars.FTP_DIR || '.' }}
         run: |
           if [ -z "$FTP_SERVER" ]; then echo "FTP sekretų nėra – praleidžiu"; exit 0; fi
           sudo apt-get install -y -qq lftp >/dev/null
@@ -28,6 +28,8 @@ jobs:
             set net:reconnect-interval-base 5;
             set net:reconnect-interval-max 30;
             set ftp:passive-mode yes;
+            rm -r -f public_html;
+            rm -f .ftp-deploy-sync-state.json;
             mirror -R --verbose=1 --parallel=2 --no-perms --exclude-glob CNAME --exclude-glob .nojekyll site/ $FTP_DIR/;
             bye"
           echo "Įkelta: $(find site -type f | wc -l) failų"
