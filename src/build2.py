@@ -176,7 +176,8 @@ def portret_video(L):
             "inLanguage": "pl", "thumbnailUrl": [f"https://i.ytimg.com/vi/{PORTRET}/hqdefault.jpg", f"https://i.ytimg.com/vi/{PORTRET}/maxresdefault.jpg"],
             "embedUrl": f"https://www.youtube.com/embed/{PORTRET}", "contentUrl": f"https://www.youtube.com/watch?v={PORTRET}",
             "url": f"https://www.youtube.com/watch?v={PORTRET}", "about": {"@id": PID}, "actor": {"@id": PID},
-            "genre": "Documentary portrait", "isFamilyFriendly": True,
+            "genre": "Documentary portrait", "isFamilyFriendly": True, "uploadDate": "2026-04-20", "duration": "PT5M",
+            "publisher": {"@type": "Organization", "name": "TVP Wilno", "url": "https://www.youtube.com/@TVP-Wilno"},
             "partOfSeries": {"@type": "TVSeries", "name": "Wileńszczyzna w obiektywie", "productionCompany": {"@type": "Organization", "name": "TVP Wilno"}},
             "sameAs": ["https://wilno.tvp.pl/92778412/wilenszczyzna-w-obiektywie-portret-wlasny-piotr-andrzejewski-73"]}
 
