@@ -1,0 +1,17 @@
+sitemap urls 108 status counts {200: 108}
+non200: []
+unique internal targets 154 external 39
+internal non-200: 0
+top10 assets:
+     277024 image/webp  https://peterbravvo.lt/foto/h/p41.webp
+     130738 image/webp  https://peterbravvo.lt/foto/g/p42.webp
+     106974 image/webp  https://peterbravvo.lt/foto/h/p33.webp
+     100776 image/webp  https://peterbravvo.lt/foto/h/p19.webp
+      96762 image/webp  https://peterbravvo.lt/foto/h/p39.webp
+      70580 image/webp  https://peterbravvo.lt/foto/g/p43.webp
+      67424 image/webp  https://peterbravvo.lt/foto/g/p38.webp
+      65208 image/webp  https://peterbravvo.lt/foto/h/p52.webp
+      61506 image/webp  https://peterbravvo.lt/foto/h/p18.webp
+      60832 image/webp  https://peterbravvo.lt/foto/h/p54.webp
+asset ext/types: Counter({'image/webp': 45, 'text/plain': 1})
+external hosts: [('i.ytimg.com', 15), ('www.youtube.com', 4), ('l24.lt', 3), ('kurierwilenski.lt', 2), ('wilnoteka.lt', 2), ('vrsa.lt', 2), ('www.vrtic.lt', 2), ('wa.me', 1), ('share.google', 1), ('wilno.tvp.pl', 1), ('www.instagram.com', 1), ('www.facebook.com', 1), ('vilnijosnaujienos.lt', 1), ('madeinvilnius.lt', 1), ('www.delfi.lt', 1)]

@@ -1,0 +1,17 @@
+RUN 1 {"ttfb":410.4000000000233,"dcl":633.2999999999884,"load":993.2000000000116,"transfer":17382,"fcp":640} requests 11 total body bytes (decoded) 493671
+RUN 2 {"ttfb":1,"dcl":115.70000000001164,"load":132.30000000004657,"transfer":0,"fcp":180} requests 11 total body bytes (decoded) 493671
+by type {"text/html":[1,61931],"text/css":[1,22265],"image/webp":[1,100776],"font/woff2":[7,296304],"image/jpeg":[1,12395]}
+117648 font/woff2 https://fonts.gstatic.com/s/unbounded/v12/Yq6W-LOTXCb04q32xlpwtcZfvRIkSYZH.woff2
+100776 image/webp https://peterbravvo.lt/foto/h/p19.webp
+61931 text/html https://peterbravvo.lt/
+50892 font/woff2 https://fonts.gstatic.com/s/unbounded/v12/Yq6W-LOTXCb04q32xlpwu8ZfvRIkSQ.woff2
+39304 font/woff2 https://fonts.gstatic.com/s/cormorantgaramond/v21/co3ZmX5slCNuHLi8bLeY9MK7whWMhyjYrEtImSqn7B6D.woff2
+34444 font/woff2 https://fonts.gstatic.com/s/cormorantgaramond/v21/co3ZmX5slCNuHLi8bLeY9MK7whWMhyjYrEtGmSqn7B6DxjY.woff2
+24436 font/woff2 https://fonts.gstatic.com/s/manrope/v23/xn7gYHE41ni1AdIRggexSvfedN4.woff2
+22265 text/css; charset=utf-8 https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,500;1,600&family=Manrope:wght@400;600;700&family=Unbounded:wght@400;500;600;700;800&display=swap
+CONSOLE / none
+CONSOLE /vestuviu-vedejas/ none
+CONSOLE /pl/wodzirej-wesele/ none
+CONSOLE /apie/ none
+CONSOLE /zinynas/dvikalbes-vestuves-vedejas/ none
+CONSOLE /kontaktai/ none

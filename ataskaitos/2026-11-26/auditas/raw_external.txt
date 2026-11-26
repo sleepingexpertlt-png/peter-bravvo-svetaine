@@ -1,0 +1,24 @@
+<urlopen error Tunnel connection failed: 403 Forbidden (agen https://wa.me/37060703318
+200 https://share.google/77jYsaOlVgeGzMrQu
+200 https://www.youtube.com/channel/UCcw58zifBWeADgGHDDlQALg
+200 https://wilno.tvp.pl/92778412/wilenszczyzna-w-obiektywie-portret-wlasny-piotr-andrzejewski-73
+200 https://kurierwilenski.lt/2020/11/17/piotr-andrzejewski-lubie-youtubea-i-nowe-mozliwosci/
+429 https://www.youtube.com/watch?v=znb1ARwL58M
+429 https://www.youtube.com/watch?v=mDnUXkfjIyk
+429 https://www.youtube.com/watch?v=yxIZjIzUVbc
+429 https://www.instagram.com/peter_bravvo/
+200 https://www.facebook.com/PeterBravvo
+<urlopen error Tunnel connection failed: 403 Forbidden (agen https://wilnoteka.lt/artykul/ks-pralat-wojciech-gorlicki-zdobywca-tytulu-polak-roku-2020-kuriera-wilenskiego
+<urlopen error Tunnel connection failed: 403 Forbidden (agen https://wilnoteka.lt/artykul/noc-swietojanska-w-rudominie-3
+200 https://l24.lt/pl/spoleczenstwo/item/406106-rudomino-bawilo-sie-do-rana
+200 https://l24.lt/lt/visuomene/item/406117-rudamina-linksminosi-iki-pat-ryto
+200 https://vrsa.lt/titulinio-naujienos/424/jonines-rudaminoje-koncertas-dj-jovani-ispudingas-lazeriu-sou-ir-sokiai-iki-ryto:4884
+200 https://www.vrtic.lt/renginiai/jonines-rudaminoje-3/
+<urlopen error Tunnel connection failed: 403 Forbidden (agen https://vilnijosnaujienos.lt/zaliaskare-nusvito-ir-nemencineje/
+<urlopen error Tunnel connection failed: 403 Forbidden (agen https://madeinvilnius.lt/naujienos/rajonas/savaitgali-iziebs-didziausias-vilniaus-rajono-kaledu-egles/
+200 https://www.vrtic.lt/renginiai/kaledu-eglutes-iziebimo-svente-nemencineje/
+<urlopen error Tunnel connection failed: 403 Forbidden (agen https://www.delfi.lt/kaledos/naujienos/nepraleiskite-kada-jusu-mieste-iziebs-kaledu-eglute-82889197
+200 https://vrsa.lt/pl/mieszkancom/nowosci/154/dozynki-w-kabiszkach-i-jubileuszowy-koncert-zespolu-kapela-swietojanska:1848
+200 https://kurierwilenski.lt/2019/02/18/dominika-lamauskaite-dziewczyna-kuriera-wilenskiego-miss-polka-litwy-2019/
+200 https://l24.lt/pl/kultura-pl/item/338389-wilenszczyzna-w-obiektywie-filmowe-opowiesci-o-roznych-miejscowosciach-kraju
+<urlopen error Tunnel connection failed: 403 Forbidden (agen https://www.lrt.lt/radioteka/irasas/2000090244/santara-vilnija-pro-objektyva

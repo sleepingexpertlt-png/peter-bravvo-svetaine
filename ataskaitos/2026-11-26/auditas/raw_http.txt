@@ -1,0 +1,68 @@
+== curl -sI
+-- https://peterbravvo.lt/
+200 -> https://peterbravvo.lt/ redirects=0
+HTTP/1.1 200 Connection Established
+HTTP/2 200 
+content-security-policy: upgrade-insecure-requests
+server: hcdn
+-- http://peterbravvo.lt/
+000 -> http://peterbravvo.lt/ redirects=0
+-- https://www.peterbravvo.lt/
+000 -> https://www.peterbravvo.lt/ redirects=0
+HTTP/1.1 403 Forbidden (agent proxy: no rule or network setting allows this host)
+-- http://www.peterbravvo.lt/
+000 -> http://www.peterbravvo.lt/ redirects=0
+== cert
+Could not read certificate from <stdin>
+Unable to load certificate
+== curl -v cert
+*  subject: CN=peterbravvo.lt
+*  start date: Nov 24 12:33:18 2026 GMT
+*  expire date: Feb 22 12:33:17 2027 GMT
+*  subjectAltName: host "peterbravvo.lt" matched cert's "peterbravvo.lt"
+*  issuer: C=US; O=Let's Encrypt; CN=YE2
+*  SSL certificate verify ok.
+== robots
+User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-SearchBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://peterbravvo.lt/sitemap.xml
+== llms
+HTTP/1.1 200 Connection Established
+
+HTTP/2 200 
+HTTP/1.1 200 Connection Established
+
+HTTP/2 200 
+# Peter Bravvo
+
+> Peter Bravvo (Piotr Andrzejewski / Piotras Andžejevskis) – renginių vedėjas iš Vilniaus. Veda lietuvių, lenkų, rusų ir anglų kalbomis. 400+ renginių, 150+ vestuvių (nuo 2013 m.). 2021–2023 m. laidos „Co się dzieje“ vedėjas TVP Wilno. Nuo 2021 m. balso aktorius Rygos studijoje Digi Media (TV anonsai, įskaitant Nickelodeon kanalą).
+
+Pozicionavimas: Svajonių vestuvių vedėjas · Meilės ir laimės akimirkų vedėjas · Smagiausių gyvenimo akimirkų vedėjas · Vedėjas, kuris tampa draugu · Partneris renginių agentūroms · Vedėjas įmonių pristatymams, konferencijoms ir parodoms.
+
+Kontaktai: +370 607 03318, bravvoband@gmail.com. Kainos: vakaro programa nuo 1000 €, konferansas 200 €/val., avansas 300 €.
+
+## Puslapiai
+- [Renginių vedėjas Peter Bravvo – vestuvės, įmonių ir šeimos šventės (LT, PL, RU, EN)](https://peterbravvo.lt/): Renginių vedėjas Peter Bravvo iš Vilniaus: 400+ renginių, 150+ vestuvių, buvęs TVP Wilno laidos vedėjas. Vedu lietuvių, lenkų, rusų ir anglų kalbomis.
+- [Vestuvių vedėjas Vilniuje – Peter Bravvo (LT, PL, RU, EN)](https://peterbravvo.lt/vestuviu-vedejas/): Vestuvių vedėjas Peter Bravvo: 150+ vestuvių, individualus scenarijus, programa lietuvių, lenkų, rusų ir anglų kalbomis. Vakaro programa nuo 1000 €.
+- [Įmonių renginių ir konferencijų vedėjas – Peter Bravvo](https://peterbravvo.lt/imoniu-renginiu-vedejas/): Įmonių vakarų, konferencijų ir apdovanojimų vedėjas Peter Bravvo. Buvęs TVP Wilno laidos vedėjas, 4 kalbos. Konferansas 200 €/val.
+- [Vedėjas produktų pristatymams, konferencijoms ir parodoms – Peter Bravvo](https://peterbravvo.lt/pristatymu-konferenciju-vedejas/): Vedėjas įmonėms: produktų ir paslaugų pristatymai konferencijose, parodose ir įmonių renginiuose. LT, PL, RU, EN. Konferansas 200 €/val.
+- [Jubiliejaus ir gimtadienio vedėjas – Peter Bravvo](https://peterbravvo.lt/jubiliejaus-vedejas/): Jubiliejų, gimtadienių ir Naujųjų metų vakarų vedėjas Peter Bravvo. Programa kelioms kartoms, 4 kalbos. Nuo 1000 €.
+- [Krikštynų ir pirmosios komunijos vedėjas – Peter Bravvo](https://peterbravvo.lt/krikstynu-vedejas/): Krikštynų, pirmosios komunijos ir šeimos švenčių vedėjas Peter Bravvo. Programa vaikams ir suaugusiems kartu, LT, PL, RU.
