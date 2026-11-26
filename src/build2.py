@@ -17,7 +17,9 @@ WA = "https://wa.me/" + TEL_RAW.lstrip("+")
 GBP = F["gbp"]
 P_EVE, P_HOUR, DEP = F["price_evening"], F["price_hour"], F["deposit_eur"]
 PID, SID, WID = DOMAIN + "/#person", DOMAIN + "/#service", DOMAIN + "/#website"
-SAME = [F["profiles"]["instagram"], F["profiles"]["facebook"], F["profiles"]["youtube"], "https://www.youtube.com/@bravvoband5082"]
+SAME = ["https://www.instagram.com/peter_bravvo/", "https://www.instagram.com/bravvoband/", "https://www.facebook.com/PeterBravvo",
+        "https://www.facebook.com/BravvoBAND", F["profiles"]["youtube"], "https://www.youtube.com/@bravvoband5082"]  # savininko sprendimas 2026-11-26: Bravvo BAND = Peter Bravvo
+DEV = {"@type": "Organization", "@id": "https://marsalas.lt/#organization", "name": "Maršalas", "legalName": "Maršalas, MB", "url": "https://marsalas.lt"}
 LANG_NAME = {"lt": "LT", "pl": "PL", "ru": "RU", "en": "EN"}
 ROLE_STACK = [("lt", "Renginių vedėjas"), ("pl", "Wodzirej"), ("ru", "Ведущий"), ("en", "Event host")]
 
@@ -383,7 +385,7 @@ def section_html(p):
 {chooser(p)}
 <main class="wrap">{main_of(p)}</main>
 {social_blk(L)}
-<footer class="foot wrap"><p><b>{e(F["brand"])}</b> · {e(u["foot"])}</p><p><a href="tel:{TEL_RAW}">{e(TEL)}</a> · <a href="mailto:{EMAIL}">{e(EMAIL)}</a> · <a href="{F["profiles"]["instagram"]}" rel="noopener">Instagram</a> · <a href="{F["profiles"]["facebook"]}" rel="noopener">Facebook</a> · <a href="{F["profiles"]["youtube"]}" rel="noopener">YouTube</a> · <a href="{GBP}" rel="noopener">Google</a></p></footer>
+<footer class="foot wrap"><p><b>{e(F["brand"])}</b> · {e(u["foot"])}</p><p><a href="tel:{TEL_RAW}">{e(TEL)}</a> · <a href="mailto:{EMAIL}">{e(EMAIL)}</a> · <a href="{F["profiles"]["instagram"]}" rel="noopener">Instagram</a> · <a href="{F["profiles"]["facebook"]}" rel="noopener">Facebook</a> · <a href="{F["profiles"]["youtube"]}" rel="noopener">YouTube</a> · <a href="{GBP}" rel="noopener">Google</a></p><p class="credit" lang="en">Powered by <a href="https://marsalas.lt" rel="noopener">MB Maršalas</a></p></footer>
 </section>'''
 
 
@@ -422,7 +424,8 @@ def graph_for(p):
                "audience": [{"@type": "PeopleAudience", "audienceType": S[sg][L]["chip"]} for sg in SEGS if sg not in ("parodos", "imones")]
                            + [{"@type": "BusinessAudience", "audienceType": S["parodos"][L]["chip"]}, {"@type": "BusinessAudience", "audienceType": S["imones"][L]["chip"]}],
                "hasOfferCatalog": {"@type": "OfferCatalog", "name": UI[L]["prices"], "itemListElement": offers}}
-    website = {"@type": "WebSite", "@id": WID, "url": DOMAIN + "/", "name": F["brand"], "publisher": {"@id": PID}, "inLanguage": LANGS}
+    website = {"@type": "WebSite", "@id": WID, "url": DOMAIN + "/", "name": F["brand"], "publisher": {"@id": PID}, "inLanguage": LANGS,
+               "creator": DEV, "maintainer": {"@id": DEV["@id"]}}
     ptype = {"home": "ProfilePage", "about": "AboutPage", "contact": "ContactPage", "hub": "CollectionPage"}.get(p["kind"], "WebPage")
     wp = {"@type": ptype, "@id": url + "#webpage", "url": url, "name": p["title"], "description": p["desc"], "inLanguage": L,
           "isPartOf": {"@id": WID}, "about": {"@id": PID}}
@@ -434,6 +437,9 @@ def graph_for(p):
         s = S[p["key"]][L]
         sv = {"@type": "Service", "@id": url + "#service", "name": s["h1"], "serviceType": s["chip"], "description": s["desc"],
               "provider": {"@id": PID}, "areaServed": {"@type": "Country", "name": "Lithuania"}, "availableLanguage": F["languages"], "url": url}
+        if p["key"] == "balsas":  # balso reklama: tik patvirtintos kalbos (LT, PL, RU); studijos adresas nežinomas – LocalBusiness nededamas
+            sv["availableLanguage"] = ["lt", "pl", "ru"]
+            sv["serviceType"] = [s["chip"], "Voice-over", "Radio advertising voice", "TV promo voice"]
         if SUKIS.get(p["key"], {}).get(L):
             sv["slogan"] = SUKIS[p["key"]][L]
         if p["key"] == "vestuves":
@@ -636,7 +642,7 @@ html{scroll-behavior:smooth}
 .yt-t{position:absolute;left:0;right:0;bottom:0;padding:22px 12px 10px;font:600 14px/1.3 var(--body);background:linear-gradient(transparent,rgba(0,0,0,.8))}
 .yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .globe{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}.hero-in{position:relative;z-index:1}
-.socs-w{max-width:1080px;margin-left:auto;margin-right:auto;padding-left:20px;padding-right:20px}.socs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.credit{font-size:12px;opacity:.7;margin-top:6px}.socs-w{max-width:1080px;margin-left:auto;margin-right:auto;padding-left:20px;padding-right:20px}.socs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
 .soc{position:relative;display:grid;grid-template-columns:40px 1fr;gap:2px 12px;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff;overflow:hidden;transition:transform .25s ease,box-shadow .25s ease}
 .soc:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .soc svg{grid-row:1/4;width:40px;height:40px;fill:#fff}.soc b{font:700 16px/1.1 var(--body)}.soc span{font:600 13px/1.2 var(--body);opacity:.9}.soc i{font:400 12px/1.2 var(--body);font-style:normal;opacity:.8}
